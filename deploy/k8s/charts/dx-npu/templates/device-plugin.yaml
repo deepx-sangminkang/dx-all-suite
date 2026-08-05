@@ -40,6 +40,8 @@ spec:
               value: /usr/local/lib
             - name: METRICS_ADDR
               value: {{ if .Values.metrics.enabled }}":{{ .Values.metrics.port }}"{{ else }}""{{ end }}
+            - name: NFD_FEATURE_DIR
+              value: {{ if .Values.featureFile.enabled }}"/nfd-features"{{ else }}""{{ end }}
           securityContext:
             privileged: {{ .Values.devicePlugin.privileged }}
           resources:
@@ -50,12 +52,18 @@ spec:
             - { name: dev, mountPath: /dev }
             - { name: sys, mountPath: /sys, readOnly: true }
             - { name: usrlocal, mountPath: /usr/local, readOnly: true }
+            {{- if .Values.featureFile.enabled }}
+            - { name: nfd-features, mountPath: /nfd-features }
+            {{- end }}
       volumes:
         - { name: device-plugin, hostPath: { path: {{ .Values.hostPaths.devicePluginDir }}, type: Directory } }
         - { name: cdi, hostPath: { path: {{ .Values.hostPaths.cdiDir }}, type: DirectoryOrCreate } }
         - { name: dev, hostPath: { path: /dev, type: Directory } }
         - { name: sys, hostPath: { path: /sys, type: Directory } }
         - { name: usrlocal, hostPath: { path: {{ .Values.hostPaths.usrLocal }}, type: Directory } }
+        {{- if .Values.featureFile.enabled }}
+        - { name: nfd-features, hostPath: { path: {{ .Values.featureFile.hostDir }}, type: DirectoryOrCreate } }
+        {{- end }}
       tolerations:
         - { key: node-role.kubernetes.io/control-plane, operator: Exists, effect: NoSchedule }
         - { key: node-role.kubernetes.io/master, operator: Exists, effect: NoSchedule }

@@ -25,6 +25,12 @@ metrics:
     enabled: false      # requires prometheus-operator CRDs
     interval: 30s
 
+# NFD local feature file: the device plugin writes features.d/deepx so the NFD
+# worker adds deepx.ai/dx-m1.{count,product,fw-version,driver-version} labels.
+featureFile:
+  enabled: true
+  hostDir: /etc/kubernetes/node-feature-discovery/features.d
+
 # NodeFeatureRule that labels nodes carrying a DEEPX M1 (PCI vendor 1ff4).
 # Requires node-feature-discovery installed in the cluster (nfd.enabled or external).
 nodeFeatureRule:
