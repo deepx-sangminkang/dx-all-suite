@@ -1,0 +1,55 @@
+name: publish-ghcr
+run-name: "publish-ghcr (ubuntu-${{ github.event.inputs.ubuntu_version }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      ubuntu_version:
+        description: "Ubuntu version to build (e.g. 24.04, 22.04)"
+        default: "24.04"
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [compiler, runtime, modelzoo]
+    steps:
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+
+      - name: Checkout (recursive submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GC_DCI_TOKEN }}
+
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image
+        run: ./docker_build.sh --target=dx-${{ matrix.target }} --ubuntu_version=${{ github.event.inputs.ubuntu_version }}
+
+      - name: Tag & push
+        run: |
+          set -euo pipefail
+          OWNER="${{ github.repository_owner }}"
+          OWNER="${OWNER,,}"
+          SUFFIX="ubuntu-${{ github.event.inputs.ubuntu_version }}"
+          SRC="dx-${{ matrix.target }}:${SUFFIX}"
+          DST="ghcr.io/${OWNER}/dx-${{ matrix.target }}:${SUFFIX}"
+          docker tag "$SRC" "$DST"
+          docker push "$DST"
+          echo "Pushed: $DST"
