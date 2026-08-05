@@ -41,8 +41,21 @@ Design rationale and vendor survey: `.omc/research/` and `.omc/plans/` in the re
 
 ## Install
 
+From the published OCI chart (CI pushes on every chart change):
+
+```bash
+helm install dx-npu oci://ghcr.io/deepx-sangminkang/charts/dx-npu -n dx-system --create-namespace
+```
+
+Or from this checkout:
+
 ```bash
 helm install dx-npu ./charts/dx-npu -n dx-system --create-namespace
+```
+
+Verify:
+
+```bash
 kubectl get node -o json | jq '.status.allocatable' | grep deepx.ai/dx-m1
 kubectl apply -f samples/test-pod.yaml && kubectl logs -f dx-m1-test
 ```

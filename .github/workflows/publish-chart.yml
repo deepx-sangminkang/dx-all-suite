@@ -1,0 +1,33 @@
+name: publish-chart
+
+on:
+  push:
+    branches: [k3s_test, main]
+    paths: ["deploy/k8s/charts/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-helm@v4
+
+      - name: Lint & package
+        run: |
+          helm dependency build deploy/k8s/charts/dx-npu
+          helm lint deploy/k8s/charts/dx-npu
+          helm package deploy/k8s/charts/dx-npu -d /tmp/chart
+
+      - name: Push to ghcr (OCI)
+        run: |
+          set -euo pipefail
+          OWNER="${{ github.repository_owner }}"
+          OWNER="${OWNER,,}"
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u "${{ github.actor }}" --password-stdin
+          helm push /tmp/chart/dx-npu-*.tgz "oci://ghcr.io/${OWNER}/charts"
