@@ -1,0 +1,33 @@
+# Real dx_app inference against a K8s-allocated DX-M1.
+#
+# Image: the suite runtime image from .github/workflows/publish-ghcr.yml
+# (run the workflow once, or build locally with ./docker_build.sh
+# --target=dx-runtime and import into the cluster). Layout inside the image:
+# /deepx/dx-runtime/dx_app (see docker/Dockerfile.dx-runtime).
+#
+# The NPU device node, runtime libs, and dxrt-cli arrive via CDI — no manual
+# device mounts. NOT YET VERIFIED end-to-end against a published image; the
+# CDI/device path is verified by samples/test-pod.yaml.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dx-app-sample
+spec:
+  restartPolicy: Never
+  nodeSelector:
+    deepx.ai/dx-m1.present: "true"
+  containers:
+    - name: dx-app
+      image: ghcr.io/deepx-sangminkang/dx-runtime:ubuntu-24.04
+      command: ["/bin/bash", "-lc"]
+      args:
+        - |
+          set -e
+          echo "=== NPU visible in pod ==="
+          dxrt-cli -s
+          echo "=== dx_app demo (task 0, image input, non-interactive) ==="
+          cd /deepx/dx-runtime/dx_app
+          ./run_demo.sh --task 0 --mode 2 --input 2 < /dev/null
+      resources:
+        limits:
+          deepx.ai/dx-m1: 1
