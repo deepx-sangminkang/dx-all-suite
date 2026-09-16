@@ -7,8 +7,8 @@ the hub tile (☁️) or with `Alt`+`9`.
 
 AWS Marketplace offers two DEEPX products, and the page is organized around them:
 
-- **[DX-Compiler (AMI)](https://aws.amazon.com/marketplace/pp/prodview-ev6ed5omu4ulo)** —
-  an Amazon Machine Image with the DEEPX model compiler (`dxcom`) pre-installed.
+- **[DEEPX Compiler Solution](https://aws.amazon.com/marketplace/pp/prodview-ev6ed5omu4ulo)**
+  (AMI) — an Amazon Machine Image with the DEEPX model compiler (`dxcom`) pre-installed.
 - **DEEPX Greengrass Solution (CloudFormation)** — a single stack that provisions a
   serverless compilation pipeline plus automated edge runtime deployment (ZTP) based
   on AWS IoT Greengrass V2.
@@ -17,22 +17,27 @@ AWS Marketplace offers two DEEPX products, and the page is organized around them
 
 Two cards cover cloud compilation:
 
-- **DX-Compiler (AMI)** — launch an Amazon EC2 instance from the DX-Compiler AMI and
-  compile ONNX models to `.dxnn` directly with the pre-installed `dxcom`. The card's
-  button opens the AMI's Marketplace listing.
+- **DEEPX Compiler Solution** — launch an Amazon EC2 instance from the DEEPX Compiler
+  Solution AMI and compile ONNX models to `.dxnn` directly with the pre-installed
+  `dxcom`. The card's button opens the AMI's Marketplace listing.
 - **Cloud Compile Pipeline** — the fully automatic route. After subscribing, set your
   local credentials with `aws configure`, then upload a pair of files — the `.onnx`
-  model and its `.json` compilation config — to the same directory in the S3 model
-  bucket. The event-driven pipeline (S3 → Lambda → Step Functions) launches a compiler
-  instance, runs `dxcom`, drops the compiled `.dxnn` back into S3, and terminates the
-  instance — so you only download the result:
+  model and its `.json` compilation config — to a dedicated per-model prefix
+  (`models/<model-name>/`) in the S3 model bucket. The event-driven pipeline
+  (S3 → Lambda → Step Functions) launches a compiler instance, runs `dxcom`, drops the
+  compiled `.dxnn` back into the same prefix, and terminates the instance — so you only
+  download the result:
 
 ```bash
 aws configure
-aws s3 cp yolov5-s-face_640x640.onnx s3://<model-bucket>/
-aws s3 cp yolov5-s-face_640x640.json s3://<model-bucket>/
-aws s3 cp s3://<model-bucket>/yolov5-s-face_640x640.dxnn .
+aws s3 cp yolov5-s-face_640x640.onnx s3://<model-bucket>/models/yolov5-s-face_640x640/
+aws s3 cp yolov5-s-face_640x640.json s3://<model-bucket>/models/yolov5-s-face_640x640/
+aws s3 cp s3://<model-bucket>/models/yolov5-s-face_640x640/yolov5-s-face_640x640.dxnn .
 ```
+
+The trigger function pairs the `.onnx` and `.json` files that share a prefix, so give
+each model its own prefix — otherwise configuration files from different models get
+mixed together.
 
 ## AWS Greengrass
 
@@ -50,6 +55,6 @@ Two cards cover edge deployment:
 !!! note "Related"
     The full step-by-step walkthrough — stack parameters, S3 upload, ZTP verification
     with `dxcli` and a `dx_stream` demo, plus cost and cleanup — is in the
-    [AWS Marketplace User Guide](https://developer.deepx.ai/06_AWS_Marketplace_Guide.html).
+    [DX-Edge guides](https://github.com/DEEPX-AI/dx-all-suite/blob/main/dx-edge/README.md).
     For compiling locally inside the studio instead, see
     **[DX Compiler](04_DX_Compiler.md)**.

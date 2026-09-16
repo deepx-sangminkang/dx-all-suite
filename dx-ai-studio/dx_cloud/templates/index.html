@@ -29,16 +29,16 @@
       <div class="cloud-grid">
         <div class="card">
           <div class="card-header">
-            <h3>DX-Compiler (AMI)</h3>
+            <h3>DEEPX Compiler Solution</h3>
             <span class="badge b-cat">EC2</span>
           </div>
           <p>
-            <span class="ko">AWS Marketplace의 DX-Compiler AMI로 EC2 인스턴스를 띄우면 <code>dxcom</code>이 사전 설치된 환경에서 ONNX 모델을 <code>.dxnn</code>으로 직접 컴파일할 수 있습니다.</span>
-            <span class="en">Launch an EC2 instance from the DX-Compiler AMI on AWS Marketplace and compile ONNX models to <code>.dxnn</code> directly with the pre-installed <code>dxcom</code>.</span>
-            <span class="es">Inicie una instancia EC2 con la AMI DX-Compiler de AWS Marketplace y compile modelos ONNX a <code>.dxnn</code> directamente con <code>dxcom</code> preinstalado.</span>
-            <span class="ja">AWS MarketplaceのDX-Compiler AMIでEC2インスタンスを起動し、プリインストールされた<code>dxcom</code>でONNXモデルを直接<code>.dxnn</code>にコンパイルできます。</span>
-            <span class="zh-CN">从AWS Marketplace的DX-Compiler AMI启动EC2实例，即可使用预装的<code>dxcom</code>将ONNX模型直接编译为<code>.dxnn</code>。</span>
-            <span class="zh-TW">從AWS Marketplace的DX-Compiler AMI啟動EC2執行個體，即可使用預裝的<code>dxcom</code>將ONNX模型直接編譯為<code>.dxnn</code>。</span>
+            <span class="ko">AWS Marketplace의 DEEPX Compiler Solution AMI로 EC2 인스턴스를 띄우면 <code>dxcom</code>이 사전 설치된 환경에서 ONNX 모델을 <code>.dxnn</code>으로 직접 컴파일할 수 있습니다.</span>
+            <span class="en">Launch an EC2 instance from the DEEPX Compiler Solution AMI on AWS Marketplace and compile ONNX models to <code>.dxnn</code> directly with the pre-installed <code>dxcom</code>.</span>
+            <span class="es">Inicie una instancia EC2 con la AMI de DEEPX Compiler Solution de AWS Marketplace y compile modelos ONNX a <code>.dxnn</code> directamente con <code>dxcom</code> preinstalado.</span>
+            <span class="ja">AWS MarketplaceのDEEPX Compiler Solution AMIでEC2インスタンスを起動し、プリインストールされた<code>dxcom</code>でONNXモデルを直接<code>.dxnn</code>にコンパイルできます。</span>
+            <span class="zh-CN">从AWS Marketplace的DEEPX Compiler Solution AMI启动EC2实例，即可使用预装的<code>dxcom</code>将ONNX模型直接编译为<code>.dxnn</code>。</span>
+            <span class="zh-TW">從AWS Marketplace的DEEPX Compiler Solution AMI啟動EC2執行個體，即可使用預裝的<code>dxcom</code>將ONNX模型直接編譯為<code>.dxnn</code>。</span>
           </p>
           <div class="card-actions">
             <a class="btn" href="https://aws.amazon.com/marketplace/pp/prodview-ev6ed5omu4ulo" target="_blank" rel="noopener">
@@ -57,25 +57,25 @@
             <span class="badge b-cat">S3</span>
           </div>
           <p>
-            <span class="ko">컴파일 파이프라인은 Greengrass Solution 스택이 프로비저닝합니다. 스택 배포 후 <code>aws configure</code>로 자격 증명을 설정하고, <code>.onnx</code>와 <code>.json</code> 설정을 S3 모델 버킷에 업로드하면 컴파일된 <code>.dxnn</code>이 같은 디렉터리에 생성됩니다.</span>
-            <span class="en">The compile pipeline is provisioned by the Greengrass Solution stack. Once the stack is deployed, set credentials with <code>aws configure</code>, upload your <code>.onnx</code> and <code>.json</code> config to the S3 model bucket, and the compiled <code>.dxnn</code> appears in the same directory.</span>
-            <span class="es">El pipeline de compilación lo aprovisiona la pila de Greengrass Solution. Una vez desplegada, configure credenciales con <code>aws configure</code> y suba su <code>.onnx</code> y <code>.json</code> al bucket S3 de modelos: el <code>.dxnn</code> compilado aparece en el mismo directorio.</span>
-            <span class="ja">コンパイルパイプラインは Greengrass Solution スタックがプロビジョニングします。スタックのデプロイ後、<code>aws configure</code>で認証情報を設定し、<code>.onnx</code>と<code>.json</code>設定をS3モデルバケットにアップロードすると、コンパイル済み<code>.dxnn</code>が同じディレクトリに生成されます。</span>
-            <span class="zh-CN">编译流水线由 Greengrass Solution 堆栈预置。堆栈部署完成后，使用<code>aws configure</code>设置凭证，将<code>.onnx</code>和<code>.json</code>配置上传到S3模型存储桶，编译好的<code>.dxnn</code>会生成在同一目录中。</span>
-            <span class="zh-TW">編譯管線由 Greengrass Solution 堆疊佈建。堆疊部署完成後，使用<code>aws configure</code>設定憑證，將<code>.onnx</code>和<code>.json</code>設定上傳到S3模型儲存貯體，編譯完成的<code>.dxnn</code>會產生在相同目錄中。</span>
+            <span class="ko">컴파일 파이프라인은 Greengrass Solution 스택이 프로비저닝합니다. 스택 배포 후 <code>aws configure</code>로 자격 증명을 설정하고, <code>.onnx</code>와 <code>.json</code> 설정을 S3 모델 버킷의 모델별 전용 프리픽스(<code>models/&lt;model-name&gt;/</code>)에 함께 업로드하면 컴파일된 <code>.dxnn</code>이 같은 프리픽스에 생성됩니다. 모델마다 프리픽스를 분리해야 설정 파일이 섞이지 않습니다.</span>
+            <span class="en">The compile pipeline is provisioned by the Greengrass Solution stack. Once the stack is deployed, set credentials with <code>aws configure</code> and upload your <code>.onnx</code> and <code>.json</code> config together to a dedicated per-model prefix (<code>models/&lt;model-name&gt;/</code>) in the S3 model bucket — the compiled <code>.dxnn</code> appears under that same prefix. Use a separate prefix per model so configuration files never get mixed.</span>
+            <span class="es">El pipeline de compilación lo aprovisiona la pila de Greengrass Solution. Una vez desplegada, configure credenciales con <code>aws configure</code> y suba su <code>.onnx</code> y <code>.json</code> juntos a un prefijo dedicado por modelo (<code>models/&lt;model-name&gt;/</code>) del bucket S3 de modelos: el <code>.dxnn</code> compilado aparece bajo ese mismo prefijo. Use un prefijo distinto por modelo para que los archivos de configuración no se mezclen.</span>
+            <span class="ja">コンパイルパイプラインは Greengrass Solution スタックがプロビジョニングします。スタックのデプロイ後、<code>aws configure</code>で認証情報を設定し、<code>.onnx</code>と<code>.json</code>設定をS3モデルバケットのモデル専用プレフィックス(<code>models/&lt;model-name&gt;/</code>)にまとめてアップロードすると、コンパイル済み<code>.dxnn</code>が同じプレフィックスに生成されます。設定ファイルが混在しないよう、モデルごとにプレフィックスを分けてください。</span>
+            <span class="zh-CN">编译流水线由 Greengrass Solution 堆栈预置。堆栈部署完成后，使用<code>aws configure</code>设置凭证，将<code>.onnx</code>和<code>.json</code>配置一并上传到S3模型存储桶中该模型专用的前缀(<code>models/&lt;model-name&gt;/</code>)，编译好的<code>.dxnn</code>会生成在同一前缀下。请为每个模型使用独立前缀，避免配置文件混淆。</span>
+            <span class="zh-TW">編譯管線由 Greengrass Solution 堆疊佈建。堆疊部署完成後，使用<code>aws configure</code>設定憑證，將<code>.onnx</code>和<code>.json</code>設定一併上傳到S3模型儲存貯體中該模型專用的前置詞(<code>models/&lt;model-name&gt;/</code>)，編譯完成的<code>.dxnn</code>會產生在相同前置詞下。請為每個模型使用獨立前置詞，避免設定檔混淆。</span>
           </p>
           <pre><code>aws configure
-aws s3 cp yolov5-s-face_640x640.onnx s3://&lt;model-bucket&gt;/
-aws s3 cp yolov5-s-face_640x640.json s3://&lt;model-bucket&gt;/
-aws s3 cp s3://&lt;model-bucket&gt;/yolov5-s-face_640x640.dxnn .</code></pre>
+aws s3 cp yolov5-s-face_640x640.onnx s3://&lt;model-bucket&gt;/models/yolov5-s-face_640x640/
+aws s3 cp yolov5-s-face_640x640.json s3://&lt;model-bucket&gt;/models/yolov5-s-face_640x640/
+aws s3 cp s3://&lt;model-bucket&gt;/models/yolov5-s-face_640x640/yolov5-s-face_640x640.dxnn .</code></pre>
           <div class="card-actions">
-            <a class="btn btn-ghost" href="https://developer.deepx.ai/06_AWS_Marketplace_Guide.html" target="_blank" rel="noopener">
-              <span class="ko">공식 가이드 문서</span>
-              <span class="en">Official Guide Docs</span>
-              <span class="es">Guía oficial</span>
-              <span class="ja">公式ガイドドキュメント</span>
-              <span class="zh-CN">官方指南文档</span>
-              <span class="zh-TW">官方指南文件</span>
+            <a class="btn btn-ghost" href="https://github.com/DEEPX-AI/dx-all-suite/blob/main/dx-edge/README.md" target="_blank" rel="noopener">
+              <span class="ko">DX-Edge 가이드</span>
+              <span class="en">DX-Edge Guides</span>
+              <span class="es">Guías de DX-Edge</span>
+              <span class="ja">DX-Edge ガイド</span>
+              <span class="zh-CN">DX-Edge 指南</span>
+              <span class="zh-TW">DX-Edge 指南</span>
             </a>
           </div>
         </div>
@@ -124,13 +124,13 @@ aws s3 cp s3://&lt;model-bucket&gt;/yolov5-s-face_640x640.dxnn .</code></pre>
             <span class="zh-TW">將裝置註冊到Thing Group後，NPU驅動、韌體、dx_rt和dx_stream會自動安裝（零接觸佈建），無需手動操作即可完成邊緣部署。</span>
           </p>
           <div class="card-actions">
-            <a class="btn btn-ghost" href="https://developer.deepx.ai/06_AWS_Marketplace_Guide.html" target="_blank" rel="noopener">
-              <span class="ko">배포 가이드 보기</span>
-              <span class="en">View Deployment Guide</span>
-              <span class="es">Ver guía de despliegue</span>
-              <span class="ja">デプロイガイドを見る</span>
-              <span class="zh-CN">查看部署指南</span>
-              <span class="zh-TW">檢視部署指南</span>
+            <a class="btn btn-ghost" href="https://github.com/DEEPX-AI/dx-all-suite/blob/main/dx-edge/README.md" target="_blank" rel="noopener">
+              <span class="ko">DX-Edge 배포 가이드</span>
+              <span class="en">DX-Edge Deployment Guides</span>
+              <span class="es">Guías de despliegue de DX-Edge</span>
+              <span class="ja">DX-Edge デプロイガイド</span>
+              <span class="zh-CN">DX-Edge 部署指南</span>
+              <span class="zh-TW">DX-Edge 部署指南</span>
             </a>
           </div>
         </div>
