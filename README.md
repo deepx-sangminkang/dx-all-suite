@@ -139,9 +139,11 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-i
   | DX_INSTALL_ARGS=--docker_volume_path=/root/docker_vol sh
 ```
 
-Pin a specific version with `DX_VERSION` (DX-Compiler / DX-ModelZoo) or `DX_REF`
-(DX-Runtime). DX-Compiler and DX-ModelZoo also accept `DX_INSTALL_DIR` to move the
-install root; DX-Runtime has none, since it installs system packages via `dpkg`:
+Pin a specific version with `DX_VERSION` (DX-Compiler / DX-ModelZoo), or per component
+with `DX_RT_VERSION` / `DX_DRIVER_VERSION` / `DX_FW_VERSION` (DX-Runtime, which otherwise
+tracks each component's `main`). DX-Compiler and DX-ModelZoo also accept `DX_INSTALL_DIR`
+to move the install root; DX-Runtime has none, since it installs system packages via
+`dpkg`:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh

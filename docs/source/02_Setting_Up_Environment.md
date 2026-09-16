@@ -33,11 +33,20 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-in
 curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-modelzoo/main/oneline-install.sh | sh
 ```
 
-Each installer resolves the latest release on its own. Override with `DX_VERSION=vX.Y.Z`
-(DX-Compiler / DX-ModelZoo) or `DX_REF=<branch|tag>` (DX-Runtime). DX-Compiler and
-DX-ModelZoo also accept `DX_INSTALL_DIR=<dir>` (default `~/deepx`) to move the install
-root; DX-Runtime has no equivalent, because it installs system packages through `dpkg`
-rather than into a directory you choose.
+Each installer resolves the newest version on its own — DX-Compiler and DX-ModelZoo from
+their latest GitHub release, DX-Runtime from the `latest` pointer on each component's
+`main` branch. Override with `DX_VERSION=vX.Y.Z` (DX-Compiler / DX-ModelZoo) or, for
+DX-Runtime, per component with `DX_RT_VERSION=3.4.2`, `DX_DRIVER_VERSION=2.6.0`,
+`DX_FW_VERSION=2.7.4`. DX-Compiler and DX-ModelZoo also accept `DX_INSTALL_DIR=<dir>`
+(default `~/deepx`) to move the install root; DX-Runtime has no equivalent, because it
+installs system packages through `dpkg` rather than into a directory you choose.
+
+!!! warning "DX-Runtime tracks `main`, so runs are not reproducible by default"
+    Because versions are resolved at run time, the downloaded artifacts are not
+    checksum-verified, and the three components follow their own branches independently —
+    a run made between dx-runtime releases can install a combination that has not been
+    validated together. Pin the versions above, or use the repository's `install.sh`,
+    whenever you need a known-good set.
 
 DX-ModelZoo installs the `cpu` extra by default — that extra is what provides its ONNX
 runtime backend, so a plain install without it cannot run inference. Use `DX_EXTRA=gpu`

@@ -137,9 +137,11 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-i
   | DX_INSTALL_ARGS=--docker_volume_path=/root/docker_vol sh
 ```
 
-버전을 고정하려면 `DX_VERSION`(DX-Compiler / DX-ModelZoo) 또는 `DX_REF`(DX-Runtime)를
-사용합니다. 설치 경로를 바꾸는 `DX_INSTALL_DIR`은 DX-Compiler와 DX-ModelZoo에만 해당하며,
-DX-Runtime은 `dpkg`로 시스템 패키지를 설치하므로 해당 옵션이 없습니다.
+버전을 고정하려면 `DX_VERSION`(DX-Compiler / DX-ModelZoo)을, DX-Runtime은 component별로
+`DX_RT_VERSION` / `DX_DRIVER_VERSION` / `DX_FW_VERSION`을 사용합니다. 지정하지 않으면
+DX-Runtime은 각 component의 `main`을 따라 최신 빌드를 설치합니다. 설치 경로를 바꾸는
+`DX_INSTALL_DIR`은 DX-Compiler와 DX-ModelZoo에만 해당하며, DX-Runtime은 `dpkg`로
+시스템 패키지를 설치하므로 해당 옵션이 없습니다.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh
