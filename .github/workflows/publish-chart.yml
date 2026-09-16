@@ -20,6 +20,7 @@ jobs:
 
       - name: Lint & package
         run: |
+          helm repo add node-feature-discovery https://kubernetes-sigs.github.io/node-feature-discovery/charts
           helm dependency build deploy/k8s/charts/dx-npu
           helm lint deploy/k8s/charts/dx-npu
           helm package deploy/k8s/charts/dx-npu -d /tmp/chart
