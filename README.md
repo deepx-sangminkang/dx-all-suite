@@ -112,6 +112,42 @@ interactive dashboard for cross-environment and cross-version comparison. Measur
 
 **DX-AllSuite** provides two environments depending on your intended use. Choose the environment that fits your needs to get started.
 
+### Quick Install (one-line)
+
+Install a single component without cloning this repository:
+
+```bash
+# DX-Compiler (x86_64 Host PC)
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | sh
+
+# DX-Runtime (target device with a DEEPX NPU: NPU driver + dx_rt + firmware)
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-install.sh | sh
+```
+
+DX-Compiler installs `dx-com` from PyPI into `~/deepx/venv-dx-compiler` and links the
+`dxcom` launcher into `~/.local/bin`, so you can run `dxcom --help` straight afterwards.
+It also apt-installs `libgl1-mesa-dev` and `libglib2.0-0`, which `opencv-python` needs to
+import, so it requires root or `sudo` on a Debian/Ubuntu host. Note this route does not
+bring the sample data — clone the repository for that.
+
+Pin a specific version with `DX_VERSION` (DX-Compiler), or per component with
+`DX_RT_VERSION` / `DX_DRIVER_VERSION` / `DX_FW_VERSION` (DX-Runtime, which otherwise
+tracks each component's `main`). DX-Compiler also accepts `DX_INSTALL_DIR` to move the
+install root; DX-Runtime has none, since it installs system packages via `dpkg`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh
+```
+
+> **DX-Runtime notes**  
+> One-line install covers `dx_fw`, `dx_rt`, and `dx_rt_npu_linux_driver`; `dx_app`
+> and `dx_stream` still use the full installation guide below. The firmware update
+> step is skipped when no NPU device is detected — rerun the same command once the
+> device is available.
+
+For the full suite (all components, source builds, Docker), use the environment
+guides below.
+
 ### AI Model Compile Environment (Host PC)  
 
 This environment is used for converting and optimizing trained AI models into DEEPX NPU-specific binaries.  

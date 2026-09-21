@@ -110,6 +110,42 @@ interactive dashboard로 렌더링됩니다. 6개 hardware 환경 측정 결과�
 
 **DX-AllSuite**는 사용 목적에 따라 두 가지 환경을 제공합니다. 필요에 맞는 환경을 선택해 시작하세요.
 
+### 한 줄 설치 (one-line install)
+
+이 repository를 clone하지 않고 개별 component를 설치할 수 있습니다.
+
+```bash
+# DX-Compiler (x86_64 Host PC)
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | sh
+
+# DX-Runtime (DEEPX NPU가 장착된 target device: NPU driver + dx_rt + firmware)
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-install.sh | sh
+```
+
+DX-Compiler는 PyPI에서 `dx-com`을 받아 `~/deepx/venv-dx-compiler`에 설치하고 `dxcom`
+런처를 `~/.local/bin`에 연결하므로, 설치 직후 바로 `dxcom --help`를 실행할 수 있습니다.
+`opencv-python` import에 필요한 `libgl1-mesa-dev`와 `libglib2.0-0`을 apt로 설치하므로
+Debian/Ubuntu 환경과 root 또는 `sudo` 권한이 필요합니다. 이 경로에는 sample data가
+포함되지 않으므로, 필요하면 repository를 clone하십시오.
+
+버전을 고정하려면 `DX_VERSION`(DX-Compiler)을, DX-Runtime은 component별로
+`DX_RT_VERSION` / `DX_DRIVER_VERSION` / `DX_FW_VERSION`을 사용합니다. 지정하지 않으면
+DX-Runtime은 각 component의 `main`을 따라 최신 빌드를 설치합니다. 설치 경로를 바꾸는
+`DX_INSTALL_DIR`은 DX-Compiler에만 해당하며, DX-Runtime은 `dpkg`로 시스템 패키지를
+설치하므로 해당 옵션이 없습니다.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh
+```
+
+!!! note "DX-Runtime 참고"
+    한 줄 설치는 `dx_fw`, `dx_rt`, `dx_rt_npu_linux_driver`를 대상으로 하며,
+    `dx_app`과 `dx_stream`은 아래 전체 설치 가이드를 따릅니다. NPU device가 감지되지
+    않으면 firmware update 단계는 건너뛰므로, device를 사용할 수 있게 된 뒤 같은
+    명령을 다시 실행해 완료하십시오.
+
+전체 suite(모든 component, source build, Docker)가 필요하면 아래 환경별 가이드를 사용하십시오.
+
 ### AI Model Compile 환경 (Host PC)
 
 학습된 AI 모델을 DEEPX NPU 전용 binary로 변환·최적화하는 데 사용하는 환경입니다.
