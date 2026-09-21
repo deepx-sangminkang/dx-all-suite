@@ -135,14 +135,14 @@ DX-Runtime은 각 component의 `main`을 따라 최신 빌드를 설치합니다
 설치하므로 해당 옵션이 없습니다.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=2.4.1 sh
 ```
 
-!!! note "DX-Runtime 참고"
-    한 줄 설치는 `dx_fw`, `dx_rt`, `dx_rt_npu_linux_driver`를 대상으로 하며,
-    `dx_app`과 `dx_stream`은 아래 전체 설치 가이드를 따릅니다. NPU device가 감지되지
-    않으면 firmware update 단계는 건너뛰므로, device를 사용할 수 있게 된 뒤 같은
-    명령을 다시 실행해 완료하십시오.
+> **DX-Runtime 참고**  
+> 한 줄 설치는 `dx_fw`, `dx_rt`, `dx_rt_npu_linux_driver`를 대상으로 하며,
+> `dx_app`과 `dx_stream`은 아래 전체 설치 가이드를 따릅니다. NPU device가 감지되지
+> 않으면 firmware update 단계는 건너뛰므로, device를 사용할 수 있게 된 뒤 같은
+> 명령을 다시 실행해 완료하십시오.
 
 전체 suite(모든 component, source build, Docker)가 필요하면 아래 환경별 가이드를 사용하십시오.
 
@@ -168,11 +168,11 @@ DEEPX NPU가 물리적으로 장착된 디바이스에서 inference를 수행하
 - **Key Tasks**: `.dxnn` 모델 실행, 실시간 데이터 inference, 리소스 관리
 - **Action**: DX-Runtime Installation Guide [Link](./docs/source/02_Setting_Up_Environment.md)
 
-!!! warning "활성화 필요"
-    설치 후 NPU Driver를 커널에 올바르게 로드하려면 시스템 재부팅이 필수입니다.
-    ```Bash
-    sudo reboot
-    ```
+> **경고: 활성화 필요**  
+> 설치 후 NPU Driver를 커널에 올바르게 로드하려면 시스템 재부팅이 필수입니다.  
+> ```Bash  
+> sudo reboot  
+> ```
 
 ## 지원 모델
 
@@ -183,8 +183,8 @@ DX-AllSuite는 우리 NPU에서 최고 성능을 내도록 최적화된, 업계 
 - **Segmentation**: DeepLabV3/DeepLabV3+, SegFormer, BiSeNet, UNet, YOLACT, 그리고 YOLO 기반 segmentation 변형 (YOLOv5/YOLOv8/YOLO26).
 - **Advanced Vision Tasks**: Face analysis (Detection, Recognition, Landmarks, Attributes), Human/Hand Pose Estimation, Low-Light Enhancement, Image Denoising, Super Resolution, Depth Estimation, Oriented Object Detection (OBB), Zero-Shot Instance Segmentation, Person Attributes.
 
-!!! note "Pro Tip"
-    모델을 직접 컴파일하는 대신, [**DEEPX ModelZoo**](https://developer.deepx.ai/modelzoo/)에서 **345개 최적화된 모델** 중 바로 사용 가능한 binary를 다운로드할 수 있습니다.
+> **참고: Pro Tip**  
+> 모델을 직접 컴파일하는 대신, [**DEEPX ModelZoo**](https://developer.deepx.ai/modelzoo/)에서 **345개 최적화된 모델** 중 바로 사용 가능한 binary를 다운로드할 수 있습니다.
 
 ## 문서 내비게이션
 

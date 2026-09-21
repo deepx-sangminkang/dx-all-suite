@@ -32,7 +32,7 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-in
 
 Each installer resolves the newest version on its own — DX-Compiler from its latest
 release on PyPI, DX-Runtime from the `latest` pointer on each component's `main` branch.
-Override with `DX_VERSION=X.Y.Z` (DX-Compiler) or, for DX-Runtime, per component with
+Override with `DX_VERSION=2.4.1` (DX-Compiler) or, for DX-Runtime, per component with
 `DX_RT_VERSION=3.4.2`, `DX_DRIVER_VERSION=2.6.0`, `DX_FW_VERSION=2.7.4`. DX-Compiler also
 accepts `DX_INSTALL_DIR=<dir>` (default `~/deepx`) to move the install root; DX-Runtime
 has no equivalent, because it installs system packages through `dpkg` rather than into a

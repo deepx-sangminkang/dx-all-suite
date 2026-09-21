@@ -136,7 +136,7 @@ tracks each component's `main`). DX-Compiler also accepts `DX_INSTALL_DIR` to mo
 install root; DX-Runtime has none, since it installs system packages via `dpkg`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=v2.4.1 sh
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-install.sh | DX_VERSION=2.4.1 sh
 ```
 
 > **DX-Runtime notes**  
