@@ -289,15 +289,15 @@ main() {
         IMAGE_TAG_SUFFIX="centos-${CENTOS_VERSION}"
     fi
 
+    if [ ${INTEL_GPU_HW_ACC} -eq 1 ] && [ ${NVIDIA_GPU_MODE} -eq 1 ]; then
+        show_help "error" "--intel_gpu_hw_acc and --nvidia_gpu are mutually exclusive."
+    fi
+
     # NVIDIA GPU mode: match the GPU image tag suffix used by build/run
     if [ ${NVIDIA_GPU_MODE} -eq 1 ]; then
         export CUDA_VERSION=${CUDA_VERSION:-12.8.1}
         export IMAGE_TAG_SUFFIX="cuda${CUDA_VERSION}-${BASE_IMAGE_NAME}-${OS_VERSION}"
         print_colored_v2 "INFO" "NVIDIA_GPU_MODE is set. (image tag suffix: ${IMAGE_TAG_SUFFIX})"
-    fi
-
-    if [ ${INTEL_GPU_HW_ACC} -eq 1 ] && [ ${NVIDIA_GPU_MODE} -eq 1 ]; then
-        show_help "error" "--intel_gpu_hw_acc and --nvidia_gpu are mutually exclusive."
     fi
 
     # Intel GPU (VA-API) mode: match the vaapi image tag suffix used by build/run
