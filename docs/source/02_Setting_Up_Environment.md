@@ -64,6 +64,28 @@ directory you choose.
     `dx_app`, `dx_stream`, source builds, and the Docker route all use the full setup
     described below.
 
+### Uninstalling a one-line install
+
+```Bash
+# DX-Compiler
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-uninstall.sh | sh
+
+# DX-Runtime
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-uninstall.sh | sh
+```
+
+DX-Compiler must be given the same `DX_INSTALL_DIR` / `DX_BIN_DIR` used at install time,
+otherwise it looks in the default location and finds nothing. DX-Runtime takes no such
+argument: both of its install routes produce the same Debian packages, so this command
+removes an `install.sh` install as well.
+
+!!! warning "What uninstalling cannot undo"
+    Firmware already flashed to the NPU is not reverted — there is no uninstall path for it.
+    The `dx_engine` Python wheel is also left in place: `libdxrt-bin` cannot know which
+    interpreter or virtualenv it went into, so it prints removal instructions during its own
+    purge instead. `dx_app` and `dx_stream` are untouched, since the one-liner never installs
+    them; use the repository's `uninstall.sh` for those.
+
 ## Prerequisites
 
 Follow these steps first to ensure a stable installation. This is the full-suite route —

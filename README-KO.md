@@ -144,6 +144,27 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-i
 > 않으면 firmware update 단계는 건너뛰므로, device를 사용할 수 있게 된 뒤 같은
 > 명령을 다시 실행해 완료하십시오.
 
+#### 삭제하기
+
+repository를 clone하지 않고 한 줄 설치를 제거할 수 있습니다.
+
+```bash
+# DX-Compiler
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-uninstall.sh | sh
+
+# DX-Runtime
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-uninstall.sh | sh
+```
+
+DX-Compiler는 설치할 때 쓴 `DX_INSTALL_DIR`/`DX_BIN_DIR`을 그대로 넘겨야 합니다. 그러지
+않으면 기본 경로를 찾아 아무것도 발견하지 못합니다. DX-Runtime은 별도 인자가 필요 없으며,
+두 설치 방식이 동일한 Debian package를 만들기 때문에 **`install.sh`로 설치한 것도 이 명령
+하나로 제거**됩니다. 어느 방식으로 설치했는지 기억하지 않아도 됩니다.
+
+되돌릴 수 없는 것이 둘 있습니다. NPU에 이미 플래시된 firmware는 제거 경로 자체가 없고,
+`dx_engine` Python wheel은 `libdxrt-bin`이 의도적으로 남기며 제거 과정에서 그 방법을
+안내합니다.
+
 전체 suite(모든 component, source build, Docker)가 필요하면 아래 환경별 가이드를 사용하십시오.
 
 ### AI Model Compile 환경 (Host PC)

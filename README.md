@@ -145,6 +145,27 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-i
 > step is skipped when no NPU device is detected — rerun the same command once the
 > device is available.
 
+#### Uninstalling
+
+Remove a one-line install without cloning either repository:
+
+```bash
+# DX-Compiler
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-compiler/main/oneline-uninstall.sh | sh
+
+# DX-Runtime
+curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-uninstall.sh | sh
+```
+
+Pass DX-Compiler the same `DX_INSTALL_DIR` / `DX_BIN_DIR` you installed with, or it looks in
+the default location and finds nothing. DX-Runtime needs no such argument, and because both
+of its install routes produce the same Debian packages, that one command also removes an
+`install.sh` install — you do not have to remember which way it went on.
+
+Two things are never undone: firmware already flashed to the NPU, which has no uninstall path
+at all, and the `dx_engine` Python wheel, which `libdxrt-bin` deliberately leaves to you and
+explains how to remove while it is being purged.
+
 For the full suite (all components, source builds, Docker), use the environment
 guides below.
 
