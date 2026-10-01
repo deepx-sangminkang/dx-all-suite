@@ -15,26 +15,28 @@ All images are based on **Ubuntu 24.04**.
 
 | Image | Immutable tags | Moving tags | Platforms |
 |---|---|---|---|
-| `ghcr.io/<owner>/dx-runtime` | `v2.4.1-rt`, `v2.4.1-rt-app`, `v2.4.1-rt-stream`, `v2.4.1-rt-app-stream`, `v2.4.1` | `rt`, `rt-app`, `rt-stream`, `rt-app-stream`, `latest` | `linux/amd64`, `linux/arm64` |
-| `ghcr.io/<owner>/dx-compiler` | `v2.4.1` | `latest` | `linux/amd64` **only** |
-| `ghcr.io/<owner>/dx-modelzoo` | `v0.10.1` | `latest` | `linux/amd64` **only** |
+| `ghcr.io/<owner>/dx-runtime` | `v<ver>-rt`, `v<ver>-rt-app`, `v<ver>-rt-stream`, `v<ver>-rt-app-stream`, `v<ver>` | `rt`, `rt-app`, `rt-stream`, `rt-app-stream`, `latest` | `linux/amd64`, `linux/arm64` |
+| `ghcr.io/<owner>/dx-compiler` | `v<ver>` | `latest` | `linux/amd64` **only** |
+| `ghcr.io/<owner>/dx-modelzoo` | `v<mz-ver>` | `latest` | `linux/amd64` **only** |
 
-The three components version independently, so their tags do not match each other —
-`dx-modelzoo` is on `v0.10.1` while the other two are on `v2.4.1`.
+The three components version independently, so their tags do not match each other:
+`dx-modelzoo` carries its own version while `dx-runtime` and `dx-compiler` carry theirs.
+`v<ver>` below stands for whichever release you are pulling — the GHCR package page
+lists the tags that actually exist.
 
-On `dx-runtime`, the bare `v2.4.1` and `latest` tags both point at the **`rt-app-stream`**
-(full) variant — but they are not equivalent: `v2.4.1` names one release and therefore never
+On `dx-runtime`, the bare `v<ver>` and `latest` tags both point at the **`rt-app-stream`**
+(full) variant — but they are not equivalent: `v<ver>` names one release and therefore never
 moves, while `latest` is repointed at the newest release every time one is published.
 
-You will also see per-architecture tags in the GHCR tag list (`v2.4.1-rt-amd64`,
-`v2.4.1-rt-app-arm64`, `v0.10.1-amd64`, …). These are build intermediates that the release
+You will also see per-architecture tags in the GHCR tag list (`v<ver>-rt-amd64`,
+`v<ver>-rt-app-arm64`, `v<mz-ver>-amd64`, …). These are build intermediates that the release
 workflow pushes before merging them into the multi-arch manifests above, and nothing deletes
 them afterwards. **They are not supported tags — ignore them** and use the manifest tags from
 the table, which resolve to the right architecture on their own.
 
 ### Tag policy
 
-- **Immutable** (`v2.4.1-rt-app`, `v2.4.1`, `v0.10.1`, …) — every tag carrying a version
+- **Immutable** (`v<ver>-rt-app`, `v<ver>`, `v<mz-ver>`, …) — every tag carrying a version
   number is pinned to that release and is never republished. **Use these in production and in
   CI**, so a new release cannot change what your deployment runs.
 - **Moving** (`latest`, `rt`, `rt-app`, `rt-stream`, `rt-app-stream`) — repointed to the
@@ -63,17 +65,20 @@ host holding all four stores about 7.6 GB rather than the 17.7 GB the column sum
 ## Pull
 
 ```bash
-# Full runtime, pinned (recommended)
-docker pull ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app-stream
+# Full runtime, newest release
+docker pull ghcr.io/<owner>/dx-runtime:rt-app-stream
+
+# Full runtime, pinned to one release (recommended for production and CI)
+docker pull ghcr.io/<owner>/dx-runtime:v<ver>-rt-app-stream
 
 # Minimal runtime core
-docker pull ghcr.io/<owner>/dx-runtime:v2.4.1-rt
+docker pull ghcr.io/<owner>/dx-runtime:rt
 
 # Compiler — amd64 only
-docker pull ghcr.io/<owner>/dx-compiler:v2.4.1
+docker pull ghcr.io/<owner>/dx-compiler:latest
 
 # ModelZoo
-docker pull ghcr.io/<owner>/dx-modelzoo:v0.10.1
+docker pull ghcr.io/<owner>/dx-modelzoo:latest
 ```
 
 `dx-runtime` is a multi-arch manifest, so Docker picks `amd64` or `arm64` automatically.
@@ -93,7 +98,7 @@ docker run --rm -it \
     --privileged --ipc=host --pid=host \
     -v /dev:/dev \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app-stream
+    ghcr.io/<owner>/dx-runtime:rt-app-stream
 ```
 
 Verify the NPU is visible from inside the container in one shot:
@@ -103,7 +108,7 @@ docker run --rm \
     --privileged --ipc=host --pid=host \
     -v /dev:/dev \
     --entrypoint dxrt-cli \
-    ghcr.io/<owner>/dx-runtime:v2.4.1-rt --status
+    ghcr.io/<owner>/dx-runtime:rt --status
 ```
 
 Expected output starts with `DXRT v…` and lists `Device 0: M1`, its RT/PCIe driver and FW
@@ -167,7 +172,7 @@ docker run --rm -it \
     -e PYTHONUNBUFFERED=1 \
     -v "$PWD/workspace:/deepx/workspace" \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app-stream
+    ghcr.io/<owner>/dx-runtime:rt-app-stream
 ```
 
 Inside the container, `dx_app` lives at `/deepx/dx-runtime/dx_app` (prebuilt binaries under
@@ -183,7 +188,7 @@ Inside the container, `dx_app` lives at `/deepx/dx-runtime/dx_app` (prebuilt bin
 > `ModuleNotFoundError: No module named 'dx_engine'`. Activate it explicitly in that case:
 > ```bash
 > docker run --rm --privileged --ipc=host --pid=host -v /dev:/dev \
->     --entrypoint bash ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app-stream \
+>     --entrypoint bash ghcr.io/<owner>/dx-runtime:rt-app-stream \
 >     -c 'source /venv-dxnn/bin/activate && python -c "import dx_engine; print(dx_engine.__name__)"'
 > ```
 
@@ -215,7 +220,7 @@ docker run --rm -it \
     -e DISPLAY="$DISPLAY" \
     -e PYTHONUNBUFFERED=1 \
     -v "$PWD/workspace:/deepx/workspace" \
-    ghcr.io/<owner>/dx-compiler:v2.4.1 bash
+    ghcr.io/<owner>/dx-compiler:latest bash
 ```
 
 `--privileged`, `--cap-add=SYS_ADMIN`, `--security-opt apparmor=unconfined`, `/dev`, and the
@@ -257,7 +262,7 @@ docker run --rm -it \
     -v /dev:/dev \
     -v "$PWD/workspace:/deepx/workspace" \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-modelzoo:v0.10.1
+    ghcr.io/<owner>/dx-modelzoo:latest
 ```
 
 `dx_modelzoo` is pip-installed into `/venv-dxnn`, so `import dx_modelzoo` works out of
@@ -304,8 +309,8 @@ docker/smoke_test.sh <image_ref> <component> [variant]
 #   component : runtime | compiler | modelzoo
 #   variant   : rt | rt-app | rt-stream | rt-app-stream   (runtime only, default rt-app-stream)
 
-docker pull ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app
-docker/smoke_test.sh ghcr.io/<owner>/dx-runtime:v2.4.1-rt-app runtime rt-app
+docker pull ghcr.io/<owner>/dx-runtime:rt-app
+docker/smoke_test.sh ghcr.io/<owner>/dx-runtime:rt-app runtime rt-app
 ```
 
 Exit codes: `0` all checks passed, `1` a check failed or the image is not present locally,
