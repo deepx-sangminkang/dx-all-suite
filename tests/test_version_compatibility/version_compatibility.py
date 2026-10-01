@@ -124,6 +124,9 @@ def _parse_suite_rows(
 
 
 def _cell_version(cell: dict[str, str | int], suite_version: str) -> str:
+    # "-" marks a component removed in that release (e.g. DX-TRON from DX-Compiler v2.5.0)
+    if str(cell["text"]) == "-":
+        return ""
     match = VERSION_RE.search(str(cell["text"]))
     if match is None:
         raise ValueError(f"Missing version in compatibility matrix row for {suite_version}")
