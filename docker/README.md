@@ -260,6 +260,13 @@ docker run --rm -it \
     ghcr.io/<owner>/dx-modelzoo:v0.10.1
 ```
 
+`dx_modelzoo` is pip-installed into `/venv-dxnn`, so `import dx_modelzoo` works out of
+the box (activate the venv first in a non-interactive shell). `torch` is the CPU build:
+the `[cpu]` extra alone does not prevent the CUDA wheels, so the image installs torch
+from the PyTorch CPU index first. For GPU inference install the `gpu` extra in the
+running container — `cd /deepx/dx-modelzoo && pip install -e ".[gpu]"` — which pulls the
+nvidia runtime wheels on demand instead of baking several GB into every pull.
+
 ## Build locally instead
 
 If you cannot pull from GHCR, build the same images from this repository:

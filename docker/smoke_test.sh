@@ -148,15 +148,15 @@ compiler)
     check "compiler examples present"   'test -d /deepx/dx-compiler/example'
     ;;
 modelzoo)
-    # dx-modelzoo itself is intentionally NOT pip-installed in the image (see
-    # Dockerfile.dx-modelzoo) — only the source tree ships. So verify (a) the
-    # dx_rt runtime the image is built on actually works, and (b) the source
-    # tarball landed intact, by byte-compiling the package entry point rather
-    # than just stat-ing the directory.
+    # dx-modelzoo is pip-installed into the venv (Dockerfile.dx-modelzoo), so import
+    # it rather than byte-compiling the source. torch is asserted CPU-only: the
+    # [cpu] extra does not prevent the CUDA build, the Dockerfile does, and a
+    # regression there would silently add several GB of nvidia wheels.
     check "dxrtd binary present"        'test -x /usr/local/bin/dxrtd'
     check "dx_engine imports in venv"   'source /venv-dxnn/bin/activate && python -c "import dx_engine"'
-    check "modelzoo pyproject present"  'test -f /deepx/dx-modelzoo/pyproject.toml'
-    check "modelzoo source compiles"    'source /venv-dxnn/bin/activate && python -m py_compile /deepx/dx-modelzoo/src/dx_modelzoo/main.py'
+    check "dx_modelzoo imports in venv" 'source /venv-dxnn/bin/activate && python -c "import dx_modelzoo"'
+    check "onnxruntime available"       'source /venv-dxnn/bin/activate && python -c "import onnxruntime"'
+    check "torch is cpu-only"           'source /venv-dxnn/bin/activate && python -c "import torch,sys; sys.exit(1) if torch.version.cuda else None"'
     ;;
 *)
     echo "ERROR: unknown component: $COMPONENT" >&2
