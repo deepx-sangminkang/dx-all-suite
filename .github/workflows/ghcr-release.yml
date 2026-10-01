@@ -141,10 +141,16 @@ jobs:
           for c in runtime compiler modelzoo; do
             case ",$components," in *",$c,"*) ;; *) continue ;; esac
             add amd64 "$RUNNER_AMD64" "$c"
-            # dx-compiler is amd64-only (docker_build.sh arch_check "amd64 x86_64").
-            # On arm64 it prints SKIP and returns 0, so an arm64 job would go green
-            # with no image and break the manifest merge. Exclude it explicitly.
-            [ "$c" = compiler ] || add arm64 "$RUNNER_ARM64" "$c"
+            # dx-compiler and dx-modelzoo are published for amd64 only.
+            # compiler cannot build on arm64 at all: docker_build.sh arch_check
+            # "amd64 x86_64" prints SKIP and returns 0, so an arm64 job would go
+            # green with no image and break the manifest merge. modelzoo has no
+            # such guard and would build, but arm64 is not a supported platform
+            # for it -- excluded here so no arm64 tag is ever pushed.
+            case "$c" in
+              compiler|modelzoo) ;;
+              *) add arm64 "$RUNNER_ARM64" "$c" ;;
+            esac
           done
           # Second line of defence, and the only one for whitespace-or-comma-only input
           # ("" or ","): the allowlist loop above iterates zero times and passes.
@@ -409,7 +415,6 @@ jobs:
           if enabled modelzoo; then
             targets="$MODELZOO_VERSION"
             if [ "$MOVING" = true ]; then targets="$targets latest"; fi
-            merge "$REGISTRY/dx-modelzoo" \
-                  "${MODELZOO_VERSION}-amd64 ${MODELZOO_VERSION}-arm64" \
-                  "$targets"
+            # amd64 only -- single-arch manifest by design.
+            merge "$REGISTRY/dx-modelzoo" "${MODELZOO_VERSION}-amd64" "$targets"
           fi

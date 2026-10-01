@@ -17,7 +17,7 @@ All images are based on **Ubuntu 24.04**.
 |---|---|---|---|
 | `ghcr.io/<owner>/dx-runtime` | `v2.4.1-rt`, `v2.4.1-rt-app`, `v2.4.1-rt-stream`, `v2.4.1-rt-app-stream`, `v2.4.1` | `rt`, `rt-app`, `rt-stream`, `rt-app-stream`, `latest` | `linux/amd64`, `linux/arm64` |
 | `ghcr.io/<owner>/dx-compiler` | `v2.4.1` | `latest` | `linux/amd64` **only** |
-| `ghcr.io/<owner>/dx-modelzoo` | `v0.10.1` | `latest` | `linux/amd64`, `linux/arm64` |
+| `ghcr.io/<owner>/dx-modelzoo` | `v0.10.1` | `latest` | `linux/amd64` **only** |
 
 The three components version independently, so their tags do not match each other —
 `dx-modelzoo` is on `v0.10.1` while the other two are on `v2.4.1`.
@@ -76,11 +76,13 @@ docker pull ghcr.io/<owner>/dx-compiler:v2.4.1
 docker pull ghcr.io/<owner>/dx-modelzoo:v0.10.1
 ```
 
-`dx-runtime` and `dx-modelzoo` are multi-arch manifests, so Docker picks `amd64` or `arm64`
-automatically. **`dx-compiler` is `linux/amd64` only** — the archive step downloads x86_64
-binaries only ([`docker_build.sh`](../docker_build.sh) `arch_check "amd64 x86_64"`), so the
-release workflow does not build an arm64 compiler at all. On an arm64 host you must compile
-models elsewhere (or under emulation, which is unsupported).
+`dx-runtime` is a multi-arch manifest, so Docker picks `amd64` or `arm64` automatically.
+
+**`dx-compiler` and `dx-modelzoo` are `linux/amd64` only.** For `dx-compiler` this is a hard
+limit: the archive step downloads x86_64 binaries only
+([`docker_build.sh`](../docker_build.sh) `arch_check "amd64 x86_64"`). `dx-modelzoo` is
+amd64 by release policy. Neither is built for arm64, so on an arm64 host you must compile
+models and run model-zoo evaluation elsewhere (emulation is unsupported).
 
 ## Run `dx-runtime` (NPU passthrough)
 
