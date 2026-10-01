@@ -21,7 +21,6 @@ services:
       - XAUTHORITY=/tmp/.docker.xauth         # X11
       - DOCKER_VOLUME_PATH=${DOCKER_VOLUME_PATH:-/deepx/workspace} # volume path
     volumes:
-      - /dev:/dev                             # device access
       - /tmp/.X11-unix:/tmp/.X11-unix         # X11
       - $HOME/.Xauthority:/root/.Xauthority   # X11
       - $XAUTHORITY:$XAUTHORITY_TARGET        # X11
@@ -30,7 +29,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${LOCAL_VOLUME_PATH:-../workspace}:${DOCKER_VOLUME_PATH:-/deepx/workspace} # mount volume
     network_mode: "host"
-    privileged: true                          # device access
     restart: on-failure
     # shm_size: '256m'                          # Uncomment if DX-COM compilation fails with "[ResourceError]: Insufficient shared memory (shm)"
     devices:

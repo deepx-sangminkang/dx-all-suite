@@ -112,6 +112,7 @@ def test_parse_version_matrix_allows_removed_component(tmp_path):
     expected = parse_version_matrix(matrix, "v2.5.0")
 
     assert expected["dxcom"] == "v2.5.0"
+    # removed component ("-") maps to "", which release/CLI checks skip
     assert expected["dxtron"] == ""
     assert expected["dx-fw"] == "v2.7.4"
 

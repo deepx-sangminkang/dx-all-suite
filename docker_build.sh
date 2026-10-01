@@ -178,9 +178,8 @@ archive_dx-compiler()
     print_colored_v2 "INFO" "Archiving dx-compiler"
 
     # Internal mode: archive runs pip/requests on the HOST (venv setup upgrades
-    # setuptools/wheel from PyPI). pip uses
-    # certifi (not the OS trust store), so it can't verify the FortiGate MITM cert
-    # on inspected hosts (pypi.org). But some hosts are NOT MITM'd and serve a real
+    # setuptools/wheel from PyPI). pip uses certifi (not the OS trust store), so it
+    # can't verify the FortiGate MITM cert on inspected hosts (pypi.org). But some hosts are NOT MITM'd and serve a real
     # public cert (sdk.deepx.ai -> Amazon CA), so pointing at the lone FortiGate cert
     # breaks those. The OS trust bundle already contains BOTH the FortiGate CA (IT
     # installed it) and the public roots, so build a combined bundle from the OS

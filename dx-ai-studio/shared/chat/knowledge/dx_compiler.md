@@ -6,7 +6,8 @@ DX Compiler (포트 8095)는 **ONNX 모델을 NPU용 `.dxnn`으로 변환**하�
 내부적으로 **DX-COM (DEEPX Compiler)**을 호출합니다.
 
 - **DX-COM**: ONNX → .dxnn 핵심 컴파일러. INT8 Intelligent Quantization, NPU/CPU 자동 파티셔닝
-- **Compilation Summary Report**: `dxcom --export_html`로 생성하는 HTML 리포트. NPU/CPU 파티션과 파티션 사유를 그래프로 시각화 (DX-TRON은 DX-Compiler v2.5.0에서 제거됨)
+- **Compilation Summary Report**: `dxcom --export_html`로 생성하는 HTML 리포트. NPU/CPU 파티션과 파티션 사유를 그래프로 시각화
+- **DX-TRON**: DX-Compiler v2.5.0에서 제거됨 → Compilation Summary Report 사용
 - **Split-screen 인터페이스**: 왼쪽 그래프 시각화 + 오른쪽 컴파일 폼
 - **6단계 컴파일 파이프라인**: PREPARE → SURGERY → PARTITION → QUANTIZATION → OPTIMIZE → CODEGEN
 - **실시간 SSE 스트리밍**: 진행률, 로그, 그래프 변화 실시간 표시
