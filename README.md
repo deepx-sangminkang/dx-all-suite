@@ -151,6 +151,7 @@ docker run --rm -it --privileged --ipc=host --pid=host -v /dev:/dev \
 ```
 
 `dx-runtime` ships in four variants (`rt`, `rt-app`, `rt-stream`, `rt-app-stream`) alongside `dx-compiler` and `dx-modelzoo`.  
+`dx-runtime` is published for both `linux/amd64` and `linux/arm64`; **`dx-compiler` and `dx-modelzoo` are `linux/amd64` only**.  
 
 - **Action**: Container image tags, variant selection, and NPU passthrough options [Link](./docker/README.md)
 

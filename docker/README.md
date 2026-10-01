@@ -6,18 +6,19 @@ Pull one instead of building the suite yourself.
 
 All images are based on **Ubuntu 24.04**.
 
-> **`<owner>` in every command below** is the GitHub organization or user that owns this
-> repository, **lowercased** (GHCR paths must be lowercase; the release workflow lowercases
-> `github.repository_owner`). For the DEEPX upstream repository that is `deepx-ai`, i.e.
-> `ghcr.io/deepx-ai/dx-runtime`. For a fork, use your own account name.
+> Commands below target the upstream **DEEPX-AI** organization. The registry path is
+> written `deepx-ai` in lowercase because GHCR rejects uppercase repository names
+> (`docker pull ghcr.io/DEEPX-AI/…` fails with *repository name must be lowercase*); the
+> release workflow lowercases `github.repository_owner` for the same reason. If you work
+> from a fork, substitute your own account name, also lowercased.
 
 ## Images and tags
 
 | Image | Immutable tags | Moving tags | Platforms |
 |---|---|---|---|
-| `ghcr.io/<owner>/dx-runtime` | `v<ver>-rt`, `v<ver>-rt-app`, `v<ver>-rt-stream`, `v<ver>-rt-app-stream`, `v<ver>` | `rt`, `rt-app`, `rt-stream`, `rt-app-stream`, `latest` | `linux/amd64`, `linux/arm64` |
-| `ghcr.io/<owner>/dx-compiler` | `v<ver>` | `latest` | `linux/amd64` **only** |
-| `ghcr.io/<owner>/dx-modelzoo` | `v<mz-ver>` | `latest` | `linux/amd64` **only** |
+| `ghcr.io/deepx-ai/dx-runtime` | `v<ver>-rt`, `v<ver>-rt-app`, `v<ver>-rt-stream`, `v<ver>-rt-app-stream`, `v<ver>` | `rt`, `rt-app`, `rt-stream`, `rt-app-stream`, `latest` | `linux/amd64`, `linux/arm64` |
+| `ghcr.io/deepx-ai/dx-compiler` | `v<ver>` | `latest` | `linux/amd64` **only** |
+| `ghcr.io/deepx-ai/dx-modelzoo` | `v<mz-ver>` | `latest` | `linux/amd64` **only** |
 
 The three components version independently, so their tags do not match each other:
 `dx-modelzoo` carries its own version while `dx-runtime` and `dx-compiler` carry theirs.
@@ -66,19 +67,19 @@ host holding all four stores about 7.6 GB rather than the 17.7 GB the column sum
 
 ```bash
 # Full runtime, newest release
-docker pull ghcr.io/<owner>/dx-runtime:rt-app-stream
+docker pull ghcr.io/deepx-ai/dx-runtime:rt-app-stream
 
 # Full runtime, pinned to one release (recommended for production and CI)
-docker pull ghcr.io/<owner>/dx-runtime:v<ver>-rt-app-stream
+docker pull ghcr.io/deepx-ai/dx-runtime:v<ver>-rt-app-stream
 
 # Minimal runtime core
-docker pull ghcr.io/<owner>/dx-runtime:rt
+docker pull ghcr.io/deepx-ai/dx-runtime:rt
 
 # Compiler — amd64 only
-docker pull ghcr.io/<owner>/dx-compiler:latest
+docker pull ghcr.io/deepx-ai/dx-compiler:latest
 
 # ModelZoo
-docker pull ghcr.io/<owner>/dx-modelzoo:latest
+docker pull ghcr.io/deepx-ai/dx-modelzoo:latest
 ```
 
 `dx-runtime` is a multi-arch manifest, so Docker picks `amd64` or `arm64` automatically.
@@ -98,7 +99,7 @@ docker run --rm -it \
     --privileged --ipc=host --pid=host \
     -v /dev:/dev \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-runtime:rt-app-stream
+    ghcr.io/deepx-ai/dx-runtime:rt-app-stream
 ```
 
 Verify the NPU is visible from inside the container in one shot:
@@ -108,7 +109,7 @@ docker run --rm \
     --privileged --ipc=host --pid=host \
     -v /dev:/dev \
     --entrypoint dxrt-cli \
-    ghcr.io/<owner>/dx-runtime:rt --status
+    ghcr.io/deepx-ai/dx-runtime:rt --status
 ```
 
 Expected output starts with `DXRT v…` and lists `Device 0: M1`, its RT/PCIe driver and FW
@@ -172,7 +173,7 @@ docker run --rm -it \
     -e PYTHONUNBUFFERED=1 \
     -v "$PWD/workspace:/deepx/workspace" \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-runtime:rt-app-stream
+    ghcr.io/deepx-ai/dx-runtime:rt-app-stream
 ```
 
 Inside the container, `dx_app` lives at `/deepx/dx-runtime/dx_app` (prebuilt binaries under
@@ -188,7 +189,7 @@ Inside the container, `dx_app` lives at `/deepx/dx-runtime/dx_app` (prebuilt bin
 > `ModuleNotFoundError: No module named 'dx_engine'`. Activate it explicitly in that case:
 > ```bash
 > docker run --rm --privileged --ipc=host --pid=host -v /dev:/dev \
->     --entrypoint bash ghcr.io/<owner>/dx-runtime:rt-app-stream \
+>     --entrypoint bash ghcr.io/deepx-ai/dx-runtime:rt-app-stream \
 >     -c 'source /venv-dxnn/bin/activate && python -c "import dx_engine; print(dx_engine.__name__)"'
 > ```
 
@@ -220,7 +221,7 @@ docker run --rm -it \
     -e DISPLAY="$DISPLAY" \
     -e PYTHONUNBUFFERED=1 \
     -v "$PWD/workspace:/deepx/workspace" \
-    ghcr.io/<owner>/dx-compiler:latest bash
+    ghcr.io/deepx-ai/dx-compiler:latest bash
 ```
 
 `--privileged`, `--cap-add=SYS_ADMIN`, `--security-opt apparmor=unconfined`, `/dev`, and the
@@ -262,7 +263,7 @@ docker run --rm -it \
     -v /dev:/dev \
     -v "$PWD/workspace:/deepx/workspace" \
     --entrypoint bash \
-    ghcr.io/<owner>/dx-modelzoo:latest
+    ghcr.io/deepx-ai/dx-modelzoo:latest
 ```
 
 `dx_modelzoo` is pip-installed into `/venv-dxnn`, so `import dx_modelzoo` works out of
@@ -309,8 +310,8 @@ docker/smoke_test.sh <image_ref> <component> [variant]
 #   component : runtime | compiler | modelzoo
 #   variant   : rt | rt-app | rt-stream | rt-app-stream   (runtime only, default rt-app-stream)
 
-docker pull ghcr.io/<owner>/dx-runtime:rt-app
-docker/smoke_test.sh ghcr.io/<owner>/dx-runtime:rt-app runtime rt-app
+docker pull ghcr.io/deepx-ai/dx-runtime:rt-app
+docker/smoke_test.sh ghcr.io/deepx-ai/dx-runtime:rt-app runtime rt-app
 ```
 
 Exit codes: `0` all checks passed, `1` a check failed or the image is not present locally,

@@ -29,8 +29,9 @@ Usage: smoke_test.sh <image_ref> <component> [variant]
   variant   : rt | rt-app | rt-stream | rt-app-stream   (runtime only; default rt-app-stream)
 
 Examples:
-  smoke_test.sh ghcr.io/deepx-ai/dx-runtime:ubuntu-24.04 runtime rt-app-stream
-  smoke_test.sh ghcr.io/deepx-ai/dx-compiler:ubuntu-24.04 compiler
+  smoke_test.sh dx-runtime:ubuntu-24.04 runtime rt-app-stream   # local docker_build.sh output
+  smoke_test.sh dx-runtime:ubuntu-24.04-rt runtime rt           # local, non-default variant
+  smoke_test.sh ghcr.io/deepx-ai/dx-compiler:latest compiler    # published image (docker pull it first)
 EOF
     exit 2
 }

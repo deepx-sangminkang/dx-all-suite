@@ -148,7 +148,8 @@ docker run --rm -it --privileged --ipc=host --pid=host -v /dev:/dev \
     --entrypoint bash ghcr.io/deepx-ai/dx-runtime:latest
 ```
 
-`dx-runtime`은 네 가지 variant(`rt`, `rt-app`, `rt-stream`, `rt-app-stream`)로 제공되며, `dx-compiler`와 `dx-modelzoo` image도 함께 게시됩니다.
+`dx-runtime`은 네 가지 variant(`rt`, `rt-app`, `rt-stream`, `rt-app-stream`)로 제공되며, `dx-compiler`와 `dx-modelzoo` image도 함께 게시됩니다.  
+`dx-runtime`은 `linux/amd64`와 `linux/arm64`를 모두 지원하며, **`dx-compiler`와 `dx-modelzoo`는 `linux/amd64`만 지원합니다**.
 
 - **Action**: Container image 태그, variant 선택 기준, NPU passthrough 옵션 [Link](./docker/README.md)
 
