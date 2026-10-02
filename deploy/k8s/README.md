@@ -42,9 +42,12 @@ From the published OCI chart (CI pushes on every chart change):
 helm install dx-npu oci://ghcr.io/deepx-ai/charts/dx-npu -n dx-system --create-namespace
 ```
 
-Or from this checkout:
+Or from this checkout. The NFD subchart is not committed, and Helm checks every declared
+dependency even with `nfd.enabled=false`, so fetch it first (needs network once):
 
 ```bash
+helm repo add node-feature-discovery https://kubernetes-sigs.github.io/node-feature-discovery/charts
+helm dependency build ./charts/dx-npu
 helm install dx-npu ./charts/dx-npu -n dx-system --create-namespace
 ```
 
@@ -70,10 +73,10 @@ kubectl apply -f samples/test-pod.yaml && kubectl logs -f dx-m1-test
 ## NFD
 
 The chart declares `node-feature-discovery` as an optional dependency (`condition:
-nfd.enabled`). To deploy NFD with the chart:
+nfd.enabled`). To deploy NFD with the chart, add `--set nfd.enabled=true` (from a checkout,
+after the `helm dependency build` step above):
 
 ```bash
-helm dependency build ./charts/dx-npu   # fetch the NFD subchart
 helm install dx-npu ./charts/dx-npu -n dx-system --create-namespace --set nfd.enabled=true
 ```
 
