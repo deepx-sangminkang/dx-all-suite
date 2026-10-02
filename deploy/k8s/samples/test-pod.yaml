@@ -16,6 +16,9 @@ spec:
         - |
           echo "=== /dev/dxrt* ===";  ls -l /dev/dxrt* || echo "no NPU injected"
           echo "=== dxcli -s ==="; LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/dxcli -s || echo "dxcli unavailable"
+          # Stay Running long enough for `kubectl wait --for=...Running` and
+          # `kubectl logs` in the docs; exiting at once would skip straight to
+          # Succeeded and the wait would time out.
           sleep 120
       resources:
         limits:

@@ -107,7 +107,7 @@ node-feature-discovery.
 Verify the NPU is schedulable and labeled:
 
 ```bash
-kubectl get node -o json | jq '.status.allocatable' | grep deepx.ai/dx-m1
+kubectl get node -o json | jq '.items[].status.allocatable' | grep deepx.ai/dx-m1
 kubectl get node --show-labels | grep -o 'deepx.ai[^,]*'
 # deepx.ai/dx-m1.present=true, .count, .product, .fw-version, .driver-version
 ```

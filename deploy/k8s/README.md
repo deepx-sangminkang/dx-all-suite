@@ -19,8 +19,6 @@ Helm: dx-npu ──► NodeFeatureRule (PCI 1ff4 → deepx.ai/dx-m1.present)
 Pod requests deepx.ai/dx-m1: 1 → containerd injects /dev/dxrtN + libs
 ```
 
-Design rationale and vendor survey: `.omc/research/` and `.omc/plans/` in the repo root.
-
 ## Prerequisites
 
 1. **Each NPU node** — host driver + firmware + runtime:
@@ -53,7 +51,7 @@ helm install dx-npu ./charts/dx-npu -n dx-system --create-namespace
 Verify:
 
 ```bash
-kubectl get node -o json | jq '.status.allocatable' | grep deepx.ai/dx-m1
+kubectl get node -o json | jq '.items[].status.allocatable' | grep deepx.ai/dx-m1
 kubectl apply -f samples/test-pod.yaml && kubectl logs -f dx-m1-test
 ```
 

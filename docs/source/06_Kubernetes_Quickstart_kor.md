@@ -103,7 +103,7 @@ cluster에 node-feature-discovery가 이미 있다면 기본값(`nfd.enabled=fal
 NPU 스케줄링 가능 여부와 라벨 확인:
 
 ```bash
-kubectl get node -o json | jq '.status.allocatable' | grep deepx.ai/dx-m1
+kubectl get node -o json | jq '.items[].status.allocatable' | grep deepx.ai/dx-m1
 kubectl get node --show-labels | grep -o 'deepx.ai[^,]*'
 # deepx.ai/dx-m1.present=true, .count, .product, .fw-version, .driver-version
 ```
