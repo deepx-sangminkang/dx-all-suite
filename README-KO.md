@@ -216,9 +216,15 @@ sudo apt install dxrt-driver-dkms   # NPU kernel driver (DKMS로 현재 kernel�
 sudo apt install libdxrt-bin        # DX-RT library, dxrt-cli 및 도구
 ```
 
-`libdxrt-bin`은 `dx_engine` Python wheel을 `/usr/share/libdxrt-bin/python`에 두기만 하고
-설치하지는 않습니다. 사용하는 Python에 맞는 wheel을 직접 pip로 설치하십시오(설치 후 출력되는
-메시지에 정확한 명령이 나옵니다). Firmware는 이 package에 포함되지 않으므로 한 줄 설치 또는
+`dx_engine` Python package는 PyPI에 `dx-engine`으로 배포됩니다. wheel이 runtime library를
+자체 포함하므로, 설치된 `libdxrt-bin`과 같은 major.minor 버전으로 virtualenv에 설치하십시오.
+
+```bash
+pip install "dx-engine==$(dpkg-query -W -f='${Version}' libdxrt-bin | cut -d. -f1,2).*"
+```
+
+같은 wheel이 오프라인 설치용으로 `/usr/share/libdxrt-bin/python`에도 들어 있습니다.
+Firmware는 이 package에 포함되지 않으므로 한 줄 설치 또는
 `./dx-runtime/install.sh --target=dx_fw`로 업데이트하고, driver 설치 후에는 재부팅하십시오.
 이후 릴리즈는 `sudo apt update && sudo apt upgrade`로 받을 수 있습니다.
 
