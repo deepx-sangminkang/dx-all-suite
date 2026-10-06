@@ -2,6 +2,22 @@
 
 **DX-AllSuite**는 **DEEPX NPU** 상에서 AI inference 애플리케이션을 컴파일, 최적화, 시뮬레이션, 배포하는 전 과정을 간소화하도록 설계된 올인원 소프트웨어 플랫폼입니다. 모델 제작부터 실제 "Physical AI" 배포까지 모두 아우르는 완전한 toolchain을 통해 최적의 호환성과 강력한 하드웨어 성능을 보장합니다.
 
+## 문서 내비게이션
+
+처음 사용하는 분께는 다음 순서로 문서를 보시길 권장합니다.
+
+- **[소개](./docs/source/index.md)**: DX-AS 개요 및 구성요소 설명
+- **★ [Agent-Driven Development (Beta)](./docs/source/00_Agent_Driven_Development_kor.md)**: AI coding agent(Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI)로 자연어 프롬프트를 사용해 DEEPX 앱 만들기
+- **[DX-Benchmark (Beta)](./dx-benchmark/README.md)**: 재현 가능한 YOLO26 NPU 벤치마크(Model-Level + E2E Pipeline)와 interactive 성능 dashboard
+- **[DX-Edge](./dx-edge/README-KO.md)**: AWS Marketplace를 통한 DEEPX NPU 배포 — Greengrass Solution(ZTP 런타임 배포), Compiler Solution(AWS에서 ONNX → `.dxnn`), DX-AIPlayer N97 Getting Started Guide
+- **Step 1. [DX-AllSuite Architecture Overview](./docs/source/01_DX-AllSuite_Architecture_Overview_kor.md)**: SDK 개요, 모듈 설명, ModelZoo 사용법
+- **Step 2. [Setting Up Environment](./docs/source/02_Setting_Up_Environment_kor.md)**: Local/Docker 설치 상세 및 트러블슈팅
+- **Step 3. [Running Your First NPU Model](./docs/source/03_Running_Your_First_NPU_Model_kor.md)**: 단계별 hands-on 스크립트 실행
+- **Step 4. [Checking Version Compatibility](./docs/source/04_Version_Compatibility_kor.md)**: SDK, Driver, Firmware 의존성 매트릭스
+- **Step 5. [FAQ Troubleshooting Guide](./docs/source/05_FAQ_Troubleshooting_Guide_kor.md)**: 환경 충돌 및 GUI 세션(X11) 오류 해결책
+- **Optional. [Kubernetes Quickstart](./docs/source/06_Kubernetes_Quickstart_kor.md)**: `dx-npu` Helm chart로 DX-M1 NPU를 Kubernetes 리소스로 스케줄링
+- **Optional. [Kubernetes 입문 가이드](./docs/source/07_Kubernetes_Beginner_Guide_kor.md)**: Kubernetes 기초부터 설명하고 NPU 실습 예제 제공
+
 <div align="center">
   <img src="./docs/source/img/DXNN-SDK-Full-Architecture.png" width="600">
   <p><strong>그림. DXNN SDK 전체 아키텍처 개요.</strong></p>
@@ -236,7 +252,6 @@ Kubernetes 클러스터 전체에서 DEEPX NPU를 스케줄링하는 환경입�
 - **Components**: Device plugin (`deepx.ai/dx-m1` 리소스), NFD 노드 라벨 (firmware/driver 버전), CDI를 통한 장치·runtime library 주입, Prometheus metrics, 원커맨드 Helm chart (`dx-npu`)
 - **Usage**: Pod에 `resources.limits: {deepx.ai/dx-m1: 1}`만 추가하면 scheduler가 NPU 노드에 배치하고, 장치가 컨테이너 안으로 자동으로 들어옴 (수동 device mount 불필요)
 - **Action**: [Kubernetes Quickstart](./docs/source/06_Kubernetes_Quickstart_kor.md) · Kubernetes가 처음이라면 [입문 가이드](./docs/source/07_Kubernetes_Beginner_Guide_kor.md)
-=======
 
 ## 지원 모델
 
@@ -249,22 +264,6 @@ DX-AllSuite는 우리 NPU에서 최고 성능을 내도록 최적화된, 업계 
 
 > **참고: Pro Tip**
 > 모델을 직접 컴파일하는 대신, [**DEEPX ModelZoo**](https://developer.deepx.ai/modelzoo/)에서 **345개 최적화된 모델** 중 바로 사용 가능한 binary를 다운로드할 수 있습니다.
-
-## 문서 내비게이션
-
-처음 사용하는 분께는 다음 순서로 문서를 보시길 권장합니다.
-
-- **[소개](./docs/source/index.md)**: DX-AS 개요 및 구성요소 설명
-- **★ [Agent-Driven Development (Beta)](./docs/source/00_Agent_Driven_Development_kor.md)**: AI coding agent(Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI)로 자연어 프롬프트를 사용해 DEEPX 앱 만들기
-- **[DX-Benchmark (Beta)](./dx-benchmark/README.md)**: 재현 가능한 YOLO26 NPU 벤치마크(Model-Level + E2E Pipeline)와 interactive 성능 dashboard
-- **[DX-Edge](./dx-edge/README-KO.md)**: AWS Marketplace를 통한 DEEPX NPU 배포 — Greengrass Solution(ZTP 런타임 배포), Compiler Solution(AWS에서 ONNX → `.dxnn`), DX-AIPlayer N97 Getting Started Guide
-- **Step 1. [DX-AllSuite Architecture Overview](./docs/source/01_DX-AllSuite_Architecture_Overview_kor.md)**: SDK 개요, 모듈 설명, ModelZoo 사용법
-- **Step 2. [Setting Up Environment](./docs/source/02_Setting_Up_Environment_kor.md)**: Local/Docker 설치 상세 및 트러블슈팅
-- **Step 3. [Running Your First NPU Model](./docs/source/03_Running_Your_First_NPU_Model_kor.md)**: 단계별 hands-on 스크립트 실행
-- **Step 4. [Checking Version Compatibility](./docs/source/04_Version_Compatibility_kor.md)**: SDK, Driver, Firmware 의존성 매트릭스
-- **Step 5. [FAQ Troubleshooting Guide](./docs/source/05_FAQ_Troubleshooting_Guide_kor.md)**: 환경 충돌 및 GUI 세션(X11) 오류 해결책
-- **Optional. [Kubernetes Quickstart](./docs/source/06_Kubernetes_Quickstart_kor.md)**: `dx-npu` Helm chart로 DX-M1 NPU를 Kubernetes 리소스로 스케줄링
-- **Optional. [Kubernetes 입문 가이드](./docs/source/07_Kubernetes_Beginner_Guide_kor.md)**: Kubernetes 기초부터 설명하고 NPU 실습 예제 제공
 
 ## 지원
 
