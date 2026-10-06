@@ -196,6 +196,27 @@ DX-Compiler는 설치할 때 쓴 `DX_INSTALL_DIR`/`DX_BIN_DIR`을 그대로 넘�
 `dx_engine` Python wheel은 `libdxrt-bin`이 의도적으로 남기며 제거 과정에서 그 방법을
 안내합니다.
 
+#### APT 저장소 (DX-Runtime)
+
+NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배포됩니다
+(Ubuntu, `amd64` / `arm64`). `apt`로 설치하고 업그레이드할 수 있습니다.
+
+```bash
+wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+
+sudo apt update
+sudo apt install dxrt-driver-dkms   # NPU kernel driver (DKMS로 현재 kernel에 맞춰 빌드)
+sudo apt install libdxrt-bin        # DX-RT library, dxrt-cli 및 도구
+```
+
+`libdxrt-bin`은 `dx_engine` Python wheel을 `/usr/share/libdxrt-bin/python`에 두기만 하고
+설치하지는 않습니다. 사용하는 Python에 맞는 wheel을 직접 pip로 설치하십시오(설치 후 출력되는
+메시지에 정확한 명령이 나옵니다). Firmware는 이 package에 포함되지 않으므로 한 줄 설치 또는
+`./dx-runtime/install.sh --target=dx_fw`로 업데이트하고, driver 설치 후에는 재부팅하십시오.
+이후 릴리즈는 `sudo apt update && sudo apt upgrade`로 받을 수 있습니다.
+
 전체 suite(모든 component, source build, Docker)가 필요하면 아래 환경별 가이드를 사용하십시오.
 
 ### AI Model Compile 환경 (Host PC)

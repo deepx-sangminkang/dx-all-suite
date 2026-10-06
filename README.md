@@ -198,6 +198,27 @@ Two things are never undone: firmware already flashed to the NPU, which has no u
 at all, and the `dx_engine` Python wheel, which `libdxrt-bin` deliberately leaves to you and
 explains how to remove while it is being purged.
 
+#### APT Repository (DX-Runtime)
+
+The NPU driver and the DX-RT runtime are also published as Debian packages in the DEEPX
+APT repository (Ubuntu, `amd64` / `arm64`), so you can install and upgrade them with `apt`:
+
+```bash
+wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+
+sudo apt update
+sudo apt install dxrt-driver-dkms   # NPU kernel driver, built for your kernel via DKMS
+sudo apt install libdxrt-bin        # DX-RT library, dxrt-cli and tools
+```
+
+`libdxrt-bin` stages the `dx_engine` Python wheels in `/usr/share/libdxrt-bin/python` but does
+not install them — pip-install the one matching your Python (the post-install message prints
+the exact command). Firmware is not part of these packages; update it with the one-line
+installer or `./dx-runtime/install.sh --target=dx_fw`, and reboot after installing the driver.
+Later releases arrive through `sudo apt update && sudo apt upgrade`.
+
 For the full suite (all components, source builds, Docker), use the environment
 guides below.
 

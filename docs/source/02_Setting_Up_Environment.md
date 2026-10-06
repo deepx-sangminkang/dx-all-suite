@@ -86,6 +86,51 @@ removes an `install.sh` install as well.
     purge instead. `dx_app` and `dx_stream` are untouched, since the one-liner never installs
     them; use the repository's `uninstall.sh` for those.
 
+## APT Repository Install (DX-Runtime)
+
+The NPU driver and the DX-RT runtime are also published as Debian packages in the DEEPX APT
+repository, for Ubuntu on `amd64` and `arm64`. Use this route when you want them managed by
+`apt` like any other system package — installed, upgraded and removed with the usual commands.
+
+```Bash
+# 1. Register the DEEPX signing key
+wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+
+# 2. Add the repository for this Ubuntu release
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+
+# 3. Install the driver and the runtime
+sudo apt update
+sudo apt install dxrt-driver-dkms
+sudo apt install libdxrt-bin
+```
+
+| Package | Contents |
+|---|---|
+| `dxrt-driver-dkms` | NPU kernel driver, built for the running kernel through DKMS (pulls in `dkms` and `build-essential`) and rebuilt automatically on kernel updates |
+| `libdxrt-bin` | Pre-built DX-RT library and headers under `/usr/local`, `dxrt-cli` and the other runtime tools, and the `dxrt` service |
+
+!!! warning "Reboot and firmware"
+    Reboot after installing `dxrt-driver-dkms` so the kernel loads the NPU driver. Firmware
+    is not shipped in the APT repository — update it with the one-line installer above or
+    `./dx-runtime/install.sh --target=dx_fw`, then cold boot as described in
+    **DX-Runtime Installation**.
+
+!!! note "`dx_engine` Python wheel is installed manually"
+    `libdxrt-bin` stages the `dx_engine` wheels (one per CPython ABI) in
+    `/usr/share/libdxrt-bin/python` but does not install them, since it cannot know which
+    interpreter or virtualenv you use. Install the matching one yourself — the package prints
+    the exact command after installation:
+    ```Bash
+    source /path/to/venv/bin/activate
+    PYTAG=cp$(python -c 'import sys;print(f"{sys.version_info[0]}{sys.version_info[1]}")')
+    pip install /usr/share/libdxrt-bin/python/dx_engine-*-${PYTAG}-${PYTAG}-*.whl
+    ```
+
+Upgrade to later releases with `sudo apt update && sudo apt upgrade`, and remove the packages
+with `sudo apt purge libdxrt-bin dxrt-driver-dkms`. This route covers the driver and runtime
+only; `dx_app` and `dx_stream` still use the full setup below.
+
 ## Prerequisites
 
 Follow these steps first to ensure a stable installation. This is the full-suite route —

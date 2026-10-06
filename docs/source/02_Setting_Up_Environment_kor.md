@@ -17,6 +17,49 @@
 
 ---
 
+## APT 저장소 설치 (DX-Runtime)
+
+NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배포됩니다(Ubuntu,
+`amd64` / `arm64`). 다른 system package처럼 `apt`로 설치·업그레이드·제거하고 싶을 때 이
+방법을 사용하십시오.
+
+```Bash
+# 1. DEEPX 서명 키 등록
+wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+
+# 2. 현재 Ubuntu 릴리즈에 맞는 저장소 추가
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+
+# 3. Driver와 runtime 설치
+sudo apt update
+sudo apt install dxrt-driver-dkms
+sudo apt install libdxrt-bin
+```
+
+| Package | 내용 |
+|---|---|
+| `dxrt-driver-dkms` | NPU kernel driver. DKMS로 현재 kernel에 맞춰 빌드되며(`dkms`, `build-essential` 의존) kernel 업데이트 시 자동으로 다시 빌드됩니다 |
+| `libdxrt-bin` | `/usr/local` 아래의 pre-built DX-RT library와 header, `dxrt-cli` 등 runtime 도구, `dxrt` service |
+
+!!! warning "재부팅과 firmware"
+    `dxrt-driver-dkms` 설치 후 kernel이 NPU driver를 로드하도록 재부팅하십시오. Firmware는
+    APT 저장소에 포함되지 않으므로 한 줄 설치 또는 `./dx-runtime/install.sh --target=dx_fw`로
+    업데이트한 뒤, **DX-Runtime 설치** 섹션의 안내대로 cold boot 하십시오.
+
+!!! note "`dx_engine` Python wheel은 직접 설치"
+    `libdxrt-bin`은 `dx_engine` wheel(CPython ABI별 1개)을 `/usr/share/libdxrt-bin/python`에
+    두기만 하고 설치하지는 않습니다. 어떤 interpreter나 virtualenv를 쓰는지 알 수 없기
+    때문입니다. 맞는 wheel을 직접 설치하십시오. 설치 후 package가 정확한 명령을 출력합니다.
+    ```Bash
+    source /path/to/venv/bin/activate
+    PYTAG=cp$(python -c 'import sys;print(f"{sys.version_info[0]}{sys.version_info[1]}")')
+    pip install /usr/share/libdxrt-bin/python/dx_engine-*-${PYTAG}-${PYTAG}-*.whl
+    ```
+
+이후 릴리즈는 `sudo apt update && sudo apt upgrade`로 업그레이드하고, 제거는
+`sudo apt purge libdxrt-bin dxrt-driver-dkms`로 합니다. 이 방법은 driver와 runtime만
+다루며, `dx_app`과 `dx_stream`은 아래 전체 설치 절차를 따릅니다.
+
 ## Prerequisites
 
 안정적인 설치를 위해 다음 단계를 먼저 수행하십시오.  
