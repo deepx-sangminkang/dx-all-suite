@@ -58,6 +58,7 @@ curl -fsSL https://raw.githubusercontent.com/DEEPX-AI/dx-runtime/main/oneline-in
 - Pin versions with `DX_VERSION` (DX-Compiler) or `DX_RT_VERSION` / `DX_DRIVER_VERSION` / `DX_FW_VERSION` (DX-Runtime).
 - Matching `oneline-uninstall.sh` scripts remove each install; the DX-Runtime uninstaller also removes an `install.sh` install.
 - DX-Runtime one-line install covers `dx_fw`, `dx_rt`, and `dx_rt_npu_linux_driver`; `dx_app` and `dx_stream` still use the full installation guide.
+- **Note:** the DX-Runtime one-line install downloads artifacts that are **not checksum-verified**, and each component tracks its own `main` branch, so a run between releases may install an unvalidated combination. Use the version pins or `install.sh` when you need a known-good set.
 
 #### 📦 New: DEEPX apt repository
 
@@ -66,7 +67,7 @@ The NPU driver and runtime can now be installed from the DEEPX apt repository:
 ```bash
 wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
 sudo apt update
 sudo apt install dxrt-driver-dkms
@@ -117,6 +118,7 @@ sudo apt install libdxrt-bin
 For detailed updated items, refer to **each environment & module's Release Notes**.
 
 ---
+
 ## DX-All-Suite v2.4.3 / 2026-09-03
 
 - DX-Compiler: v2.4.2
