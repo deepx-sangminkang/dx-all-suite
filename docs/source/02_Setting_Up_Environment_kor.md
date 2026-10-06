@@ -24,17 +24,32 @@ NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배�
 방법을 사용하십시오.
 
 ```Bash
-# 1. DEEPX 서명 키 등록
-wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+# 1. DEEPX 서명 키 다운로드 및 fingerprint 확인
+wget -O deepx-archive-keyring.asc https://apt.releases.deepx.ai/gpg
+gpg --show-keys deepx-archive-keyring.asc
 
-# 2. 현재 Ubuntu 릴리즈에 맞는 저장소 추가
+# 2. fingerprint가 일치할 때만 키를 설치하고 다운로드한 파일 삭제
+sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
+rm deepx-archive-keyring.asc
+
+# 3. 현재 Ubuntu 릴리즈에 맞는 저장소 추가
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
-# 3. Driver와 runtime 설치
+# 4. Driver와 runtime 설치
 sudo apt update
 sudo apt install dxrt-driver-dkms
 sudo apt install libdxrt-bin
 ```
+
+!!! danger "2단계 전에 키 fingerprint 확인"
+    변조된 키(예: 중간자 공격)를 막기 위해, 키를 설치하기 전에 `gpg --show-keys` 출력을
+    확인하십시오. 다음 40자 fingerprint와 정확히 일치해야 합니다 — `3A20CC853C64AE328D0F58CFD816AAC6689DBDEA`:
+    ```
+    pub   rsa4096 2026-08-11 [SCEA]
+          3A20CC853C64AE328D0F58CFD816AAC6689DBDEA
+    uid                      DeepX APT Repo <jhsa@deepx.ai>
+    ```
+    다르면 중단하고 `deepx-archive-keyring.asc`를 삭제한 뒤 DEEPX 기술 지원에 문의하십시오.
 
 | Package | 내용 |
 |---|---|

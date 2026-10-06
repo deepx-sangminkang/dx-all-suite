@@ -93,17 +93,33 @@ repository, for Ubuntu on `amd64` and `arm64`. Use this route when you want them
 `apt` like any other system package — installed, upgraded and removed with the usual commands.
 
 ```Bash
-# 1. Register the DEEPX signing key
-wget -O - https://apt.releases.deepx.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg
+# 1. Download the DEEPX signing key and check its fingerprint
+wget -O deepx-archive-keyring.asc https://apt.releases.deepx.ai/gpg
+gpg --show-keys deepx-archive-keyring.asc
 
-# 2. Add the repository for this Ubuntu release
+# 2. Only if the fingerprint matches, install the key and remove the download
+sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
+rm deepx-archive-keyring.asc
+
+# 3. Add the repository for this Ubuntu release
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
-# 3. Install the driver and the runtime
+# 4. Install the driver and the runtime
 sudo apt update
 sudo apt install dxrt-driver-dkms
 sudo apt install libdxrt-bin
 ```
+
+!!! danger "Verify the key fingerprint before step 2"
+    To guard against a tampered key (e.g. a man-in-the-middle attack), check the output of
+    `gpg --show-keys` before installing the key. It must show exactly this 40-character
+    fingerprint — `3A20CC853C64AE328D0F58CFD816AAC6689DBDEA`:
+    ```
+    pub   rsa4096 2026-08-11 [SCEA]
+          3A20CC853C64AE328D0F58CFD816AAC6689DBDEA
+    uid                      DeepX APT Repo <jhsa@deepx.ai>
+    ```
+    If it differs, stop, delete `deepx-archive-keyring.asc`, and contact DEEPX support.
 
 | Package | Contents |
 |---|---|
