@@ -8,15 +8,16 @@
   <thead align="center">
     <tr>
       <th rowspan="3">Release Date</th>
-      <th colspan="7">DX-AllSuite</th>
+      <th colspan="8">DX-AllSuite</th>
     </tr>
     <tr>
       <th colspan="2">DX-Compiler</th>
       <th colspan="5">DX-Runtime</th>
+      <th rowspan="2">DX-ModelZoo</th>
     </tr>
     <tr>
       <th>DX-COM</th>
-      <th>DX-TRON</th>
+      <th>DX-TRON<sup>*</sup></th>
       <th>DX-FW</th>
       <th>NPU Driver</th>
       <th>DX-RT</th>
@@ -26,12 +27,31 @@
   </thead>
   <tbody align="center">
     <tr>
+      <td rowspan="3">2026-10-09</td>
+      <td colspan="8">v2.5.0</td>
+    </tr>
+    <tr>
+      <td colspan="2">v2.5.0</td>
+      <td colspan="5">v2.5.0</td>
+      <td rowspan="2">v1.0.0</td>
+    </tr>
+    <tr>
+      <td>v2.5.0</td>
+      <td>—</td>
+      <td>v2.7.6</td>
+      <td>v2.7.0</td>
+      <td>v3.5.0</td>
+      <td>v3.2.0</td>
+      <td>v3.3.0</td>
+    </tr>
+    <tr>
       <td rowspan="3">2026-09-03</td>
-      <td colspan="7">v2.4.3</td>
+      <td colspan="8">v2.4.3</td>
     </tr>
     <tr>
       <td colspan="2">v2.4.2</td>
       <td colspan="5">v2.4.2</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.4.1</td>
@@ -44,11 +64,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-08-14</td>
-      <td colspan="7">v2.4.2</td>
+      <td colspan="8">v2.4.2</td>
     </tr>
     <tr>
       <td colspan="2">v2.4.1</td>
       <td colspan="5">v2.4.2</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.4.0</td>
@@ -61,11 +82,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-08-03</td>
-      <td colspan="7">v2.4.1</td>
+      <td colspan="8">v2.4.1</td>
     </tr>
     <tr>
       <td colspan="2">v2.4.1</td>
       <td colspan="5">v2.4.1</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.4.0</td>
@@ -78,11 +100,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-07-22</td>
-      <td colspan="7">v2.4.0</td>
+      <td colspan="8">v2.4.0</td>
     </tr>
     <tr>
       <td colspan="2">v2.4.0</td>
       <td colspan="5">v2.4.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.4.0</td>
@@ -95,11 +118,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-05-14</td>
-      <td colspan="7">v2.3.3</td>
+      <td colspan="8">v2.3.3</td>
     </tr>
     <tr>
       <td colspan="2">v2.3.1</td>
       <td colspan="5">v2.3.3</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.3.0</td>
@@ -112,11 +136,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-05-11</td>
-      <td colspan="7">v2.3.2</td>
+      <td colspan="8">v2.3.2</td>
     </tr>
     <tr>
       <td colspan="2">v2.3.1</td>
       <td colspan="5">v2.3.2</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.3.0</td>
@@ -129,11 +154,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-05-06</td>
-      <td colspan="7">v2.3.1</td>
+      <td colspan="8">v2.3.1</td>
     </tr>
     <tr>
       <td colspan="2">v2.3.1</td>
       <td colspan="5">v2.3.1</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.3.0</td>
@@ -146,11 +172,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-04-10</td>
-      <td colspan="7">v2.3.0</td>
+      <td colspan="8">v2.3.0</td>
     </tr>
     <tr>
       <td colspan="2">v2.3.0</td>
       <td colspan="5">v2.3.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.3.0</td>
@@ -163,11 +190,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-02-26</td>
-      <td colspan="7">v2.2.2</td>
+      <td colspan="8">v2.2.2</td>
     </tr>
     <tr>
       <td colspan="2">v2.2.1</td>
       <td colspan="5">v2.2.2</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.2.1</td>
@@ -180,11 +208,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-02-09</td>
-      <td colspan="7">v2.2.1</td>
+      <td colspan="8">v2.2.1</td>
     </tr>
     <tr>
       <td colspan="2">v2.2.0</td>
       <td colspan="5">v2.2.1</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.2.0</td>
@@ -197,11 +226,12 @@
     </tr>
     <tr>
       <td rowspan="3">2026-01-16</td>
-      <td colspan="7">v2.2.0</td>
+      <td colspan="8">v2.2.0</td>
     </tr>
     <tr>
       <td colspan="2">v2.2.0</td>
       <td colspan="5">v2.2.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.2.0</td>
@@ -214,11 +244,12 @@
     </tr>
     <tr>
       <td rowspan="3">2025-11-28</td>
-      <td colspan="7">v2.1.0</td>
+      <td colspan="8">v2.1.0</td>
     </tr>
     <tr>
       <td colspan="2">v2.1.0</td>
       <td colspan="5">v2.1.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.1.0</td>
@@ -231,11 +262,12 @@
     </tr>
     <tr>
       <td rowspan="3">2025-09-08</td>
-      <td colspan="7">v2.0.0</td>
+      <td colspan="8">v2.0.0</td>
     </tr>
     <tr>
       <td colspan="2">v2.0.0</td>
       <td colspan="5">v2.0.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v2.0.0</td>
@@ -248,11 +280,12 @@
     </tr>
     <tr>
       <td rowspan="3">2025-07-23</td>
-      <td colspan="7">v1.0.0</td>
+      <td colspan="8">v1.0.0</td>
     </tr>
     <tr>
       <td colspan="2">v1.0.0</td>
       <td colspan="5">v1.0.0</td>
+      <td rowspan="2">-</td>
     </tr>
     <tr>
       <td>v1.60.1</td>
@@ -265,6 +298,9 @@
     </tr>
   </tbody>
 </table>
+
+<sup>*</sup> DX-TRON is no longer included in DX-AllSuite starting from v2.5.0.  
+`—` : Not included in that release. `-` : Not listed in this matrix for that release.
 
 ---
 
@@ -290,6 +326,12 @@ dxcom -v
 컴파일러를 라이브러리로 사용 중인 경우 Python을 통해 버전을 직접 확인할 수도 있습니다.  
 ```Bash
 python3 -c "import dx_com; print(dx_com.__version__)"
+```
+
+**단계 3. Model Zoo**  
+설치된 DX-ModelZoo 버전을 확인합니다. `dx-modelzoo`가 설치된 환경에서 실행하십시오.
+```Bash
+python3 -c "from dx_modelzoo.version import __version__; print(__version__)"
 ```
 
 ---
