@@ -328,6 +328,9 @@ ENV TARGET_USER=${TARGET_USER:-deepx}
 ENV TARGET_HOME=${TARGET_HOME:-/deepx}
 
 # UID/GID based user processing
+# When HOST_UID already exists, `usermod -g` is required even if a HOST_GID group was
+# renamed: `groupmod -n` only renames that group, it does not make it the user's
+# primary group (e.g. host 1000:100 would otherwise keep gid=1000).
 RUN set -eux; \
     if getent passwd "$HOST_UID" > /dev/null; then \
         EXISTING_USER=$(getent passwd "$HOST_UID" | cut -d: -f1); \
