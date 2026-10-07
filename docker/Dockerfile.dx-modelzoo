@@ -190,12 +190,13 @@ RUN set -x && \
         echo "ERROR: dx_rt Debian package not found under release/latest" && exit 1; \
     fi && \
     # ponytail: fork-only test hack. libdxrt-bin preinst requires `modinfo dxrt_driver`,
-    # which never exists in a docker build. Fake it for the install only; drop this once
+    # which never exists in a docker build. Fake it for the install only (apt resets PATH
+    # for dpkg to DPkg::Path, so /usr/local/sbin must be added there); drop this once
     # dx_rt's preinst skips the check inside containers.
     printf '#!/bin/sh\n[ "$1" = -F ] && echo 2.5.0\nexit 0\n' > /usr/local/sbin/modinfo && \
     chmod +x /usr/local/sbin/modinfo && \
     apt-get update && \
-    apt-get install -y "$(realpath "$DEB_FILE")" && \
+    apt-get install -y -o DPkg::Path=/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin "$(realpath "$DEB_FILE")" && \
     rm -f /usr/local/sbin/modinfo && \
     rm -rf /usr/share/libdxrt/build_* && \
     rm -rf /var/lib/apt/lists/* && \
