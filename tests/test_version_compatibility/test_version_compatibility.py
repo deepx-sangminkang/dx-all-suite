@@ -95,9 +95,37 @@ def test_parse_version_matrix_omits_unlisted_optional_columns(tmp_path):
 
     expected = parse_version_matrix(matrix, "v2.3.3")
 
-    assert "dx-modelzoo" not in expected
-    assert expected["dxtron"] == "v2.0.1"
-    assert expected["dx-app"] == "v3.1.1"
+    assert expected == {
+        "dx-compiler": "v2.3.1",
+        "dx-runtime": "v2.3.3",
+        "dxcom": "v2.3.0",
+        "dxtron": "v2.0.1",
+        "dx-fw": "v2.5.6",
+        "npu-driver": "v2.4.1",
+        "dx-rt": "v3.3.2",
+        "dx-stream": "v3.0.1",
+        "dx-app": "v3.1.1",
+    }
+
+
+def test_parse_version_matrix_rejects_missing_modelzoo_cell(tmp_path):
+    matrix = tmp_path / "04_Version_Compatibility.md"
+    matrix.write_text(
+        """
+        <table><tbody>
+          <tr><td rowspan="3">2026-10-09</td><td colspan="8">v2.5.0</td></tr>
+          <tr><td colspan="2">v2.5.0</td><td colspan="5">v2.5.0</td></tr>
+          <tr>
+            <td>v2.5.0</td><td>—</td><td>v2.7.6</td><td>v2.7.0</td>
+            <td>v3.5.0</td><td>v3.2.0</td><td>v3.3.0</td>
+          </tr>
+        </tbody></table>
+        """,
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="Invalid compatibility matrix row shape"):
+        parse_version_matrix(matrix, "v2.5.0")
 
 
 def test_parse_version_matrix_rejects_missing_required_version(tmp_path):

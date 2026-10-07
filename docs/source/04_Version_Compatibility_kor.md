@@ -299,8 +299,8 @@
   </tbody>
 </table>
 
-<sup>*</sup> DX-TRON is no longer included in DX-AllSuite starting from v2.5.0.  
-`—` : Not included in that release. `-` : Not listed in this matrix for that release.
+<sup>*</sup> DX-TRON은 v2.5.0부터 DX-AllSuite에 더 이상 포함되지 않습니다.  
+`—` : 해당 릴리스에 포함되지 않음. `-` : 해당 릴리스에서 이 매트릭스에 미기재.
 
 ---
 

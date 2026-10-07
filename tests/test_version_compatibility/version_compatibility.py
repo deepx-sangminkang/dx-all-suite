@@ -111,7 +111,7 @@ def _parse_suite_rows(
 
     parent_row = rows[suite_row_index + 1]
     component_row = rows[suite_row_index + 2]
-    if len(parent_row) < 2 or len(component_row) < len(COMPONENT_KEYS):
+    if len(parent_row) < 3 or len(component_row) < len(COMPONENT_KEYS):
         raise ValueError(f"Invalid compatibility matrix row shape for {suite_version}")
 
     cells = list(zip(("dx-compiler", "dx-runtime", "dx-modelzoo"), parent_row))
