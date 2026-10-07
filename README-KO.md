@@ -199,7 +199,7 @@ DX-Compiler는 설치할 때 쓴 `DX_INSTALL_DIR`/`DX_BIN_DIR`을 그대로 넘�
 #### APT 저장소 (DX-Runtime)
 
 NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배포됩니다
-(Ubuntu, `amd64` / `arm64`). `apt`로 설치하고 업그레이드할 수 있습니다.
+(Ubuntu / Debian, `amd64` / `arm64`). `apt`로 설치하고 업그레이드할 수 있습니다.
 서명 키를 신뢰하기 전에 반드시 확인하십시오. `gpg --show-keys`가 fingerprint
 `3A20CC853C64AE328D0F58CFD816AAC6689DBDEA`를 출력해야 하며, 다르면 키를 설치하지 말고 중단하십시오.
 
@@ -209,7 +209,7 @@ gpg --show-keys deepx-archive-keyring.asc   # fingerprint가 다음과 같아야
 sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
 rm deepx-archive-keyring.asc
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
 sudo apt update
 sudo apt install dxrt-driver-dkms   # NPU kernel driver (DKMS로 현재 kernel에 맞춰 빌드)

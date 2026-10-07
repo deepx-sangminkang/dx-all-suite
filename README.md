@@ -201,7 +201,7 @@ explains how to remove while it is being purged.
 #### APT Repository (DX-Runtime)
 
 The NPU driver and the DX-RT runtime are also published as Debian packages in the DEEPX
-APT repository (Ubuntu, `amd64` / `arm64`), so you can install and upgrade them with `apt`.
+APT repository (Ubuntu / Debian, `amd64` / `arm64`), so you can install and upgrade them with `apt`.
 Verify the signing key before trusting it: `gpg --show-keys` must print the fingerprint
 `3A20CC853C64AE328D0F58CFD816AAC6689DBDEA`. If it does not match, stop — do not install the key.
 
@@ -211,7 +211,7 @@ gpg --show-keys deepx-archive-keyring.asc   # fingerprint must be 3A20CC853C64AE
 sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
 rm deepx-archive-keyring.asc
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
 sudo apt update
 sudo apt install dxrt-driver-dkms   # NPU kernel driver, built for your kernel via DKMS

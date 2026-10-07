@@ -89,7 +89,7 @@ removes an `install.sh` install as well.
 ## APT Repository Install (DX-Runtime)
 
 The NPU driver and the DX-RT runtime are also published as Debian packages in the DEEPX APT
-repository, for Ubuntu on `amd64` and `arm64`. Use this route when you want them managed by
+repository, for Ubuntu and Debian on `amd64` and `arm64`. Use this route when you want them managed by
 `apt` like any other system package — installed, upgraded and removed with the usual commands.
 
 ```Bash
@@ -101,8 +101,8 @@ gpg --show-keys deepx-archive-keyring.asc
 sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
 rm deepx-archive-keyring.asc
 
-# 3. Add the repository for this Ubuntu release
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+# 3. Add the repository for this Ubuntu / Debian release
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
 # 4. Install the driver and the runtime
 sudo apt update

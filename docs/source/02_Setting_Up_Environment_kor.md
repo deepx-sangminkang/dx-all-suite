@@ -19,8 +19,8 @@
 
 ## APT 저장소 설치 (DX-Runtime)
 
-NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배포됩니다(Ubuntu,
-`amd64` / `arm64`). 다른 system package처럼 `apt`로 설치·업그레이드·제거하고 싶을 때 이
+NPU driver와 DX-RT runtime은 DEEPX APT 저장소에 Debian package로도 배포됩니다(Ubuntu /
+Debian, `amd64` / `arm64`). 다른 system package처럼 `apt`로 설치·업그레이드·제거하고 싶을 때 이
 방법을 사용하십시오.
 
 ```Bash
@@ -32,8 +32,8 @@ gpg --show-keys deepx-archive-keyring.asc
 sudo gpg --dearmor -o /usr/share/keyrings/deepx-archive-keyring.gpg deepx-archive-keyring.asc
 rm deepx-archive-keyring.asc
 
-# 3. 현재 Ubuntu 릴리즈에 맞는 저장소 추가
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/deepx.list
+# 3. 현재 Ubuntu / Debian 릴리즈에 맞는 저장소 추가
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deepx-archive-keyring.gpg] https://apt.releases.deepx.ai $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/deepx.list
 
 # 4. Driver와 runtime 설치
 sudo apt update
