@@ -233,8 +233,11 @@ RUN set -x && \
 # the CUDA/cuDNN libraries come from the nvidia/cuda cudnn-runtime base image.
 #   CUDA 12 -> onnxruntime-gpu < 1.27 (last CUDA 12 build: 1.26.0)
 #   CUDA 13 -> onnxruntime-gpu >= 1.27
-# ldd fails the build if the CUDA provider still cannot resolve a library
-# (libcuda.so.1 is the driver library, mounted by the NVIDIA runtime at `docker run`).
+# The build fails if CUDAExecutionProvider is not compiled into the installed
+# onnxruntime (e.g. a CPU build shadowing it) or if ldd cannot resolve a library of
+# the CUDA provider (libcuda.so.1 is the driver library, mounted by the NVIDIA runtime
+# at `docker run`). A future CUDA-major switch of onnxruntime-gpu >= 1.27 shows up
+# here as unresolved libraries, so the CUDA 13 line needs no upper bound.
 ARG CUDA_VERSION=""
 RUN if [ -n "${CUDA_VERSION}" ]; then \
         set -x && \
@@ -246,11 +249,14 @@ RUN if [ -n "${CUDA_VERSION}" ]; then \
         esac && \
         pip uninstall -y onnxruntime && \
         pip install --no-cache-dir "${ORT_GPU_SPEC}" && \
-        ORT_CUDA_LIB=$(python -c "import os, onnxruntime; print(os.path.join(os.path.dirname(onnxruntime.__file__), 'capi', 'libonnxruntime_providers_cuda.so'))") && \
+        ORT_CUDA_LIB=$(python -c "import os, sys, onnxruntime as ort; \
+            providers = ort.get_available_providers(); \
+            assert 'CUDAExecutionProvider' in providers, providers; \
+            print('onnxruntime-gpu', ort.__version__, providers, file=sys.stderr); \
+            print(os.path.join(os.path.dirname(ort.__file__), 'capi', 'libonnxruntime_providers_cuda.so'))") && \
         if ldd "${ORT_CUDA_LIB}" | grep "not found" | grep -v "libcuda\.so"; then \
             echo "onnxruntime-gpu CUDA provider has unresolved libraries for CUDA ${CUDA_VERSION}" && exit 1; \
-        fi && \
-        python -c "import onnxruntime as ort; print('onnxruntime-gpu', ort.__version__, ort.get_available_providers())"; \
+        fi; \
     fi
 
 WORKDIR /deepx
