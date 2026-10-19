@@ -583,8 +583,9 @@ def pytest_sessionfinish(session, exitstatus):
     # links too; add a cross-session lock if that ever becomes a real setup.
     if hasattr(session.config, "workerinput") or not _ran_local_install:
         return
-    volume = os.getenv("DOCKER_VOLUME_PATH", "/deepx/workspace").rstrip("/")
-    checkout = Path(os.getenv("LOCAL_VOLUME_PATH", str(REPO_ROOT)))
+    # `or`: an empty DOCKER_VOLUME_PATH would make the prefix "/" and match every link
+    volume = (os.getenv("DOCKER_VOLUME_PATH") or "/deepx/workspace").rstrip("/")
+    checkout = Path(os.getenv("LOCAL_VOLUME_PATH") or str(REPO_ROOT))
     for link in checkout.glob("*/venv-*"):
         if link.is_symlink() and not link.exists() and os.readlink(link).startswith(volume + "/"):
             link.unlink()
