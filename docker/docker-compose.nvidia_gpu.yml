@@ -30,3 +30,5 @@ services:
       args:
         FROM_IMAGE: "nvidia/cuda"
         TAG_NAME: "${CUDA_VERSION:-12.8.1}-cudnn-runtime-ubuntu${OS_VERSION}"
+        # selects the CUDA-matched onnxruntime-gpu in Dockerfile.dx-modelzoo
+        CUDA_VERSION: "${CUDA_VERSION:-12.8.1}"
