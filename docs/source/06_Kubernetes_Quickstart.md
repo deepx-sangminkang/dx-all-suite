@@ -172,6 +172,6 @@ The device plugin serves Prometheus metrics on `:9400` (headless Service
 | Device reported unhealthy | Card present in sysfs but absent from `dxcli -s` — usually needs a host power cycle |
 | Inference Pod stays `Running`, `dxrun` never exits | Host `dxrt.service` is running on the node — `sudo systemctl disable --now dxrt.service` (Prerequisites, step 1) |
 | `dxrun: symbol lookup error: undefined symbol` in a Pod | Node DX-RT and Pod image DX-RT differ — CDI mounts the host `libdxrt.so.3`; install the same DX-RT build on the node and in the image |
-| `GLIBC_2.xx not found` running `dxcli` in a pod | The image's glibc is older than the host runtime's. DXRT v3.4.2 needs GLIBC_2.38 — use `ubuntu:24.04` or newer as the base |
+| `GLIBC_2.xx not found` running `dxcli` in a pod | The image's glibc is older than what the host DX-RT binaries (injected by CDI) need. Check on the node with `objdump -T /usr/local/bin/dxcli /usr/local/lib/libdxrt.so.3` (highest `GLIBC_` version); `ubuntu:24.04` or newer is the safe base |
 
 Full chart values and details: `deploy/k8s/README.md`.
