@@ -1,8 +1,10 @@
 # Smoke test: requests one DX-M1 NPU and prints device + dxcli status.
 #
 # Base image needs a glibc at least as new as the host DX-RT binaries injected by
-# CDI require (check on the node: objdump -T /usr/local/bin/dxcli | grep GLIBC_);
-# ubuntu:24.04 is a safe default.
+# CDI require (check on the node: objdump -T /usr/local/bin/dxcli | grep GLIBC_).
+# Prebuilt libdxrt-bin needs glibc >= 2.27; a DX-RT built from source on the node
+# follows the node's glibc (e.g. GLIBC_2.38 on Ubuntu 24.04). ubuntu:24.04 is a
+# safe default.
 apiVersion: v1
 kind: Pod
 metadata:
