@@ -314,7 +314,7 @@ The **Graph** tab shows how it changed over time. A Grafana dashboard lives at
 | No `/dev/dxrt0` inside the Pod | The delivery helper (CDI) didn't run | containerd CDI setup ([Quickstart](06_Kubernetes_Quickstart.md) step 2) |
 | `ImagePullBackOff` | The child can't find their bag (image) | Image name, whether it's published, whether it was imported locally |
 | `dxrt service is not running` | The block helper (`dxrtd`) wasn't started | Run `dxrtd &` first in the Pod command |
-| `GLIBC_2.xx not found` | The desk is too old to read the booklet | Use `ubuntu:24.04` or newer as the Pod image |
+| `GLIBC_2.xx not found` | The desk is too old to read the booklet | Use `ubuntu:24.04` or newer as the Pod image ([Quickstart](06_Kubernetes_Quickstart.md#troubleshooting) has the details) |
 
 ---
 

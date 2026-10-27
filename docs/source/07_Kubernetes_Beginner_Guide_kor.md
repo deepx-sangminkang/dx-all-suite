@@ -316,7 +316,7 @@ Grafana의 **Dashboards → New → Import**에 붙여 넣으면 됩니다.
 | Pod 안에 `/dev/dxrt0`가 없음 | 배달 도우미(CDI)가 일을 안 함 | containerd CDI 설정 ([Quickstart](06_Kubernetes_Quickstart_kor.md) 2단계) |
 | `ImagePullBackOff` | 아이가 가방(이미지)을 못 찾음 | 이미지 이름, 레지스트리 게시 여부, 로컬 import 여부 |
 | `dxrt service is not running` | 블록 도우미(`dxrtd`)를 안 켬 | Pod 명령에서 `dxrtd &`를 먼저 실행 |
-| `GLIBC_2.xx not found` | 아이 책상이 너무 낡아 설명서를 못 읽음 | Pod 이미지를 `ubuntu:24.04` 이상으로 |
+| `GLIBC_2.xx not found` | 아이 책상이 너무 낡아 설명서를 못 읽음 | Pod 이미지를 `ubuntu:24.04` 이상으로 (상세: [Quickstart](06_Kubernetes_Quickstart_kor.md#troubleshooting)) |
 
 ---
 
