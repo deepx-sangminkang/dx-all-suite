@@ -467,8 +467,8 @@ Docker 이미지는 GPU 가속 옵션으로 빌드할 수 있습니다. 두 옵�
 NVIDIA driver는 이미지의 CUDA 버전을 지원해야 하며, container toolkit이 container 시작 시 이를 검사합니다.
 
 - 기본 CUDA 12.8.1 이미지: driver **R570 이상** (`nvidia-smi`의 CUDA Version ≥ 12.8).
-- R535, R550, R560, R565 branch의 datacenter/professional GPU는 CUDA forward compatibility로 실행 가능하지만, 그 외 GPU(예: GeForce)는 이 driver에서 `unsatisfied condition: cuda>=12.8` 오류로 실패합니다.
-- `--cuda_version=<ver>` 사용 시 driver가 해당 CUDA 버전을 지원해야 합니다. Ubuntu 24.04용 cuDNN 베이스 이미지는 CUDA 12.6.3이 가장 낮은 버전입니다 (driver R560 이상).
+- R535, R550, R560 또는 R565 branch의 datacenter/professional GPU도 CUDA forward compatibility로 실행할 수 있습니다. 그 외 GPU(예: GeForce)는 이 branch에서 `unsatisfied condition: cuda>=12.8` 오류로 실패합니다.
+- `--cuda_version=<ver>` 사용 시 driver가 해당 CUDA 버전을 지원해야 합니다. Ubuntu 24.04용 cuDNN 베이스 이미지는 CUDA 12.6.3부터 제공되며(그보다 낮은 tag 없음), GeForce 등 datacenter 외 GPU에서는 driver R560 이상이 필요합니다.
 
 ```Bash
 # CUDA base image로 빌드 (기본 CUDA 버전: 12.8.1, --cuda_version=<ver>로 변경 가능)

@@ -474,8 +474,8 @@ Host requirements: NVIDIA driver and [nvidia-container-toolkit](https://docs.nvi
 The NVIDIA driver must support the image's CUDA version, which the container toolkit checks at container start:
 
 - Default CUDA 12.8.1 image: driver **R570 or newer** (`nvidia-smi` shows CUDA Version ≥ 12.8).
-- Datacenter/professional GPUs on the R535, R550, R560 or R565 branches also run it through CUDA forward compatibility; other GPUs (e.g. GeForce) on these drivers fail with `unsatisfied condition: cuda>=12.8`.
-- With `--cuda_version=<ver>`, the driver must support that CUDA version. The oldest Ubuntu 24.04 cuDNN base image is CUDA 12.6.3 (driver R560 or newer).
+- Datacenter/professional GPUs on the R535, R550, R560, or R565 branches can also run it through CUDA forward compatibility. Other GPUs (e.g. GeForce) on these branches fail with `unsatisfied condition: cuda>=12.8`.
+- With `--cuda_version=<ver>`, the driver must support that CUDA version. Ubuntu 24.04 cuDNN base images start at CUDA 12.6.3 (no lower tag exists), which needs driver R560 or newer on GeForce and other non-datacenter GPUs.
 
 ```Bash
 # Build on a CUDA base image (default CUDA version: 12.8.1, override with --cuda_version=<ver>)
