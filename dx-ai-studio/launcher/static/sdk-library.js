@@ -1264,7 +1264,7 @@
   async function openBookViewer(book, drawerColor, options) {
     var opts = options || {};
     if (book && book.type === 'link') {   // the manuals live on the site, not in this checkout
-      window.open(book.path, '_blank', 'noopener');
+      window.open(book.path, '_blank', 'noopener,noreferrer');
       return;
     }
     const viewer = document.getElementById('sdkBookViewer');

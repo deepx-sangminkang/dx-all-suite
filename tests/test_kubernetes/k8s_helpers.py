@@ -12,6 +12,7 @@ import shlex
 import shutil
 import subprocess
 import time
+import urllib.error
 import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
@@ -40,10 +41,13 @@ class _PageText(HTMLParser):
         self._pre = False
         self._ol: list = []
         self._step = False   # just wrote "N. ": keep the step's first words on that line
+        self._skip = 0       # inside <script>/<style>: not page text
 
     def handle_starttag(self, tag, attrs):
         attr = dict(attrs)
-        if tag == "pre":
+        if tag in ("script", "style"):
+            self._skip += 1
+        elif tag == "pre":
             lang = re.search(r"language-(\w+)", attr.get("class") or "")
             self.out.append(f"\n```{lang.group(1) if lang else ''}\n")
             self._pre = True
@@ -68,7 +72,9 @@ class _PageText(HTMLParser):
                 self.out.append("\n")
 
     def handle_endtag(self, tag):
-        if tag == "pre":
+        if tag in ("script", "style"):
+            self._skip = max(0, self._skip - 1)
+        elif tag == "pre":
             self.out.append("\n```\n")
             self._pre = False
         elif tag == "ol" and self._ol:
@@ -81,6 +87,8 @@ class _PageText(HTMLParser):
             self.out.append("\n")
 
     def handle_data(self, data):
+        if self._skip:
+            return
         if self._step:
             if not data.strip():
                 return
@@ -90,14 +98,17 @@ class _PageText(HTMLParser):
 
 class SiteDoc:
     """A guide page on developer.deepx.ai, read the way the local Markdown files are.
-    `unreachable` is set when the page cannot be fetched (no network): the text is
-    then empty and the tests that need it skip instead of failing."""
+    When the page cannot be read the text is empty and one flag says why:
+    `unreachable` (no network, or the site is failing) or `gone` (the site answered
+    404/410: the page was removed or renamed). `require_doc` turns them into a skip
+    and a failure."""
 
     def __init__(self, slug: str) -> None:
         self.name = slug
         self.url = f"{SITE}/{slug}/"
         self.parent = REPO_ROOT
         self.unreachable = False
+        self.gone = 0   # the HTTP status, when the site says the page does not exist
         self._text = None
 
     def read_text(self) -> str:
@@ -107,10 +118,28 @@ class SiteDoc:
                     page = _PageText()
                     page.feed(r.read().decode("utf-8", errors="replace"))
                 self._text = "".join(page.out)
+            except urllib.error.HTTPError as e:
+                if e.code in (404, 410):
+                    self.gone = e.code
+                else:
+                    self.unreachable = True
+                self._text = ""
             except OSError:
                 self.unreachable = True
                 self._text = ""
         return self._text
+
+
+def require_doc(doc) -> None:
+    """A published guide that cannot be fetched skips the test; one the site no
+    longer has fails it. Local files pass through."""
+    if not isinstance(doc, SiteDoc):
+        return
+    doc.read_text()
+    if doc.gone:
+        pytest.fail(f"{doc.url} is gone from the site (HTTP {doc.gone})")
+    if doc.unreachable:
+        pytest.skip(f"{doc.url} is unreachable")
 
 
 def doc_id(doc) -> str:
@@ -195,9 +224,8 @@ def doc_block(doc: Path, heading_prefix: str, n: int = 0, lang: str = "bash") ->
     """Return the n-th ``lang`` fenced block under the heading (or numbered step)
     that starts with ``heading_prefix``. Fails if the heading is gone, so renaming
     a Quickstart section breaks the test instead of silently skipping a step."""
+    require_doc(doc)
     text = doc.read_text()
-    if getattr(doc, "unreachable", False):
-        pytest.skip(f"{doc.url} is unreachable")
     headings = [(m.start(), m.group(1)) for m in _HEADING.finditer(text)]
     found = []
     for m in _FENCE.finditer(text):

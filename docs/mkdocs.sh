@@ -50,8 +50,20 @@ check_and_install_deps() {
     fi
 }
 
+# Remove everything main() stages for the build. Runs on any exit (EXIT trap), so a
+# failed or interrupted build leaves no generated file in the source tree.
+cleanup() {
+    rm -f "${SCRIPT_DIR}/mkdocs.yml"
+    [ -n "${AI_STUDIO_DST:-}" ] && rm -rf "$AI_STUDIO_DST"
+    [ -n "${SHOWCASE_DST:-}" ] && rm -f "$SHOWCASE_DST"
+    [ "${#SHOWCASE_MEDIA[@]}" -gt 0 ] && rm -f "${SHOWCASE_MEDIA[@]}"
+    return 0
+}
+SHOWCASE_MEDIA=()
+
 main() {
     check_and_install_deps
+    trap cleanup EXIT
 
     VERSION=$(head -n 1 ${PROJECT_ROOT}/release.ver | tr -d '\r\n')
     echo "VERSION=${VERSION}"
@@ -87,7 +99,8 @@ main() {
     # The showcase catalog (dx-agent-dev-showcase/README.md) and its media (repo-root img/)
     # live outside source/. Stage the catalog next to source/ with image paths that point
     # into source/img/, and copy the media there, so the Showcases page resolves; both are
-    # removed after the build.
+    # removed by cleanup(). The catalog is generated (dx-showcase-gen) and always writes
+    # its media as ../img/<name>, which is the only form the sed below rewrites.
     SHOWCASE_SRC="${PROJECT_ROOT}/dx-agent-dev-showcase/README.md"
     SHOWCASE_DST="${SCRIPT_DIR}/_showcase_catalog.md"
     SHOWCASE_MEDIA=()
@@ -113,10 +126,7 @@ main() {
         mkdocs build
     fi
 
-    # Clean up
-    rm mkdocs.yml
-    rm -rf "$AI_STUDIO_DST"
-    rm -f "$SHOWCASE_DST" "${SHOWCASE_MEDIA[@]}"
+    # Staged files are removed by cleanup() (EXIT trap)
 }
 
 # parse args
