@@ -482,6 +482,7 @@
     card.dataset.path = (file.path || '').toLowerCase();
 
     const isPdf = file.type === 'pdf';
+    const isLink = file.type === 'link';   // a manual page on developer.deepx.ai
     const sizeStr = formatSize(file.size);
     const colorClass = isPdf ? 'pdf' : (drawerColor || 'green');
 
@@ -490,8 +491,8 @@
       <div class="file-card-info">
         <div class="file-card-title">${escHtml(file.title)}</div>
         <div class="file-card-meta">
-          <span>${isPdf ? 'PDF' : 'MD'}</span>
-          <span>${sizeStr}</span>
+          <span>${isPdf ? 'PDF' : (isLink ? 'WEB' : 'MD')}</span>
+          ${isLink ? '' : `<span>${sizeStr}</span>`}
         </div>
       </div>
       <span class="file-card-pull">${_t('→ Open', '→ 열기', '→ 開く', '→ 打开', '→ 開啟', '→ Abrir')}</span>`;
@@ -1262,6 +1263,10 @@
 
   async function openBookViewer(book, drawerColor, options) {
     var opts = options || {};
+    if (book && book.type === 'link') {   // the manuals live on the site, not in this checkout
+      window.open(book.path, '_blank', 'noopener');
+      return;
+    }
     const viewer = document.getElementById('sdkBookViewer');
     if (!viewer) return;
 

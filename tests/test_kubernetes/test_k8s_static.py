@@ -20,7 +20,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).parent))
 from k8s_helpers import (  # noqa: E402
     CHART_DIR, DASHBOARD, FIXTURES, K8S_DOCS, PLUGIN_METRICS_GO, REPO_ROOT, RESOURCE,
-    SAMPLES_DIR, ensure_chart_deps, helm, jq_exprs, md_links, need, repo_paths, run,
+    SAMPLES_DIR, doc_id, ensure_chart_deps, helm, jq_exprs, md_links, need, repo_paths, run,
 )
 
 pytestmark = pytest.mark.kubernetes_static
@@ -133,7 +133,7 @@ def test_s9_dashboard_queries_existing_metrics():
 # --------------------------------------------------------------------------- docs
 
 NODE_LIST = FIXTURES / "node-list.json"
-DOC_IDS = [d.relative_to(REPO_ROOT).as_posix() for d in K8S_DOCS]
+DOC_IDS = [doc_id(d) for d in K8S_DOCS]
 
 
 def _jq_cases():
@@ -141,6 +141,8 @@ def _jq_cases():
 
 
 def test_s10_docs_have_jq_checks():
+    if not _jq_cases() and any(getattr(d, "unreachable", False) for d in K8S_DOCS):
+        pytest.skip("the published K8s guides are unreachable")
     assert _jq_cases(), "no `kubectl get node -o json | jq` command found in the K8s docs"
 
 
@@ -160,4 +162,6 @@ def test_s10_doc_jq_works_on_real_node_list(doc, expr):
 def test_s11_doc_paths_and_links_exist(doc):
     missing = [p for p in repo_paths(doc) if not (REPO_ROOT / p).exists()]
     missing += [l for l in md_links(doc) if not (doc.parent / l).exists()]
-    assert not missing, f"{doc.relative_to(REPO_ROOT)} points at missing files: {missing}"
+    if getattr(doc, "unreachable", False):
+        pytest.skip(f"{doc.url} is unreachable")
+    assert not missing, f"{doc_id(doc)} points at missing files: {missing}"

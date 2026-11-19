@@ -12,6 +12,8 @@ import shlex
 import shutil
 import subprocess
 import time
+import urllib.request
+from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
@@ -24,15 +26,106 @@ DASHBOARD = K8S_DIR / "dashboards" / "dx-npu.json"
 PLUGIN_METRICS_GO = REPO_ROOT / "dx-k8s-device-plugin" / "internal" / "metrics" / "metrics.go"
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
-QUICKSTART = REPO_ROOT / "docs" / "source" / "06_Kubernetes_Quickstart.md"
+SITE = "https://developer.deepx.ai/tech-docs/DX-AllSuite"
+
+
+class _PageText(HTMLParser):
+    """Published guide page -> Markdown-like text: `##` headings, numbered `**step**`
+    items, fenced code blocks, `inline code` and `| table | rows |`, which is all the
+    doc helpers and the tests look for."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.out: list = []
+        self._pre = False
+        self._ol: list = []
+        self._step = False   # just wrote "N. ": keep the step's first words on that line
+
+    def handle_starttag(self, tag, attrs):
+        attr = dict(attrs)
+        if tag == "pre":
+            lang = re.search(r"language-(\w+)", attr.get("class") or "")
+            self.out.append(f"\n```{lang.group(1) if lang else ''}\n")
+            self._pre = True
+        elif tag == "br" and self._pre:
+            self.out.append("\n")
+        elif re.fullmatch(r"h[1-6]", tag):
+            self.out.append("\n" + "#" * int(tag[1]) + " ")
+        elif tag == "ol":
+            self._ol.append(int(attr.get("start") or 1) - 1)
+        elif tag == "li" and self._ol:
+            self._ol[-1] += 1
+            self.out.append(f"\n{self._ol[-1]}. ")
+            self._step = True
+        elif tag in ("strong", "code") and not self._pre:
+            self.out.append("**" if tag == "strong" else "`")
+        elif tag == "tr":
+            self.out.append("\n|")
+        elif tag in ("td", "th"):
+            self.out.append(" ")
+        elif tag in ("p", "li", "div", "ul") and not self._pre:
+            if not self._step:
+                self.out.append("\n")
+
+    def handle_endtag(self, tag):
+        if tag == "pre":
+            self.out.append("\n```\n")
+            self._pre = False
+        elif tag == "ol" and self._ol:
+            self._ol.pop()
+        elif tag in ("strong", "code") and not self._pre:
+            self.out.append("**" if tag == "strong" else "`")
+        elif tag in ("td", "th"):
+            self.out.append(" |")
+        elif re.fullmatch(r"h[1-6]", tag):
+            self.out.append("\n")
+
+    def handle_data(self, data):
+        if self._step:
+            if not data.strip():
+                return
+            self._step = False
+        self.out.append(data.replace("\u200b", ""))
+
+
+class SiteDoc:
+    """A guide page on developer.deepx.ai, read the way the local Markdown files are.
+    `unreachable` is set when the page cannot be fetched (no network): the text is
+    then empty and the tests that need it skip instead of failing."""
+
+    def __init__(self, slug: str) -> None:
+        self.name = slug
+        self.url = f"{SITE}/{slug}/"
+        self.parent = REPO_ROOT
+        self.unreachable = False
+        self._text = None
+
+    def read_text(self) -> str:
+        if self._text is None:
+            try:
+                with urllib.request.urlopen(self.url, timeout=20) as r:
+                    page = _PageText()
+                    page.feed(r.read().decode("utf-8", errors="replace"))
+                self._text = "".join(page.out)
+            except OSError:
+                self.unreachable = True
+                self._text = ""
+        return self._text
+
+
+def doc_id(doc) -> str:
+    return doc.url if isinstance(doc, SiteDoc) else doc.relative_to(REPO_ROOT).as_posix()
+
+
+QUICKSTART = SiteDoc("Kubernetes_Quickstart")
+BEGINNER_GUIDE = SiteDoc("Kubernetes_Beginner_Guide")
 K8S_DOCS = [
     QUICKSTART,
-    REPO_ROOT / "docs" / "source" / "06_Kubernetes_Quickstart_kor.md",
-    REPO_ROOT / "docs" / "source" / "07_Kubernetes_Beginner_Guide.md",
-    REPO_ROOT / "docs" / "source" / "07_Kubernetes_Beginner_Guide_kor.md",
+    BEGINNER_GUIDE,
     K8S_DIR / "README.md",
     REPO_ROOT / "README.md",
-    REPO_ROOT / "README-KO.md",
+    # absent from a release tree
+    *(p for p in (REPO_ROOT / "README-KO.md",) if p.is_file()),
 ]
 
 RESOURCE = "deepx.ai/dx-m1"
@@ -103,6 +196,8 @@ def doc_block(doc: Path, heading_prefix: str, n: int = 0, lang: str = "bash") ->
     that starts with ``heading_prefix``. Fails if the heading is gone, so renaming
     a Quickstart section breaks the test instead of silently skipping a step."""
     text = doc.read_text()
+    if getattr(doc, "unreachable", False):
+        pytest.skip(f"{doc.url} is unreachable")
     headings = [(m.start(), m.group(1)) for m in _HEADING.finditer(text)]
     found = []
     for m in _FENCE.finditer(text):
@@ -122,8 +217,8 @@ def jq_exprs(doc: Path) -> list:
 
 
 def repo_paths(doc: Path) -> list:
-    """Repo-relative paths a reader is told to use (deploy/k8s/…, docs/source/…)."""
-    paths = re.findall(r"(?<![\w/.])((?:deploy/k8s|docs/source)/[\w./-]*\w)", doc.read_text())
+    """Repo-relative paths a reader is told to use (deploy/k8s/…)."""
+    paths = re.findall(r"(?<![\w/.])(deploy/k8s/[\w./-]*\w)", doc.read_text())
     return sorted(set(paths))
 
 

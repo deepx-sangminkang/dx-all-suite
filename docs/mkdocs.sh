@@ -84,6 +84,27 @@ main() {
         echo -e "${COLOR_YELLOW}WARNING: dx-ai-studio docs not found at $AI_STUDIO_SRC — AI Studio section will be missing${COLOR_RESET}"
     fi
 
+    # The showcase catalog (dx-agent-dev-showcase/README.md) and its media (repo-root img/)
+    # live outside source/. Stage the catalog next to source/ with image paths that point
+    # into source/img/, and copy the media there, so the Showcases page resolves; both are
+    # removed after the build.
+    SHOWCASE_SRC="${PROJECT_ROOT}/dx-agent-dev-showcase/README.md"
+    SHOWCASE_DST="${SCRIPT_DIR}/_showcase_catalog.md"
+    SHOWCASE_MEDIA=()
+    rm -f "$SHOWCASE_DST"
+    if [ -f "$SHOWCASE_SRC" ]; then
+        sed 's#\.\./img/#source/img/#g' "$SHOWCASE_SRC" > "$SHOWCASE_DST"
+        for media in "${PROJECT_ROOT}"/img/dx-agent-dev-*; do
+            [ -e "$media" ] || continue
+            staged="${SCRIPT_DIR}/source/img/$(basename "$media")"
+            [ -e "$staged" ] && continue
+            cp "$media" "$staged" && SHOWCASE_MEDIA+=("$staged")
+        done
+    else
+        echo -e "${COLOR_YELLOW}WARNING: showcase catalog not found at $SHOWCASE_SRC — Showcases page will be empty${COLOR_RESET}"
+        : > "$SHOWCASE_DST"
+    fi
+
     if [ $USE_SERVE -eq 1 ]; then
         # Run mkdocs build
         mkdocs serve
@@ -95,6 +116,7 @@ main() {
     # Clean up
     rm mkdocs.yml
     rm -rf "$AI_STUDIO_DST"
+    rm -f "$SHOWCASE_DST" "${SHOWCASE_MEDIA[@]}"
 }
 
 # parse args
