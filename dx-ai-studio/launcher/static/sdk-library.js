@@ -483,6 +483,7 @@
 
     const isPdf = file.type === 'pdf';
     const isLink = file.type === 'link';   // a manual page on developer.deepx.ai
+    card.dataset.type = isPdf ? 'pdf' : (isLink ? 'link' : 'md');
     const sizeStr = formatSize(file.size);
     const colorClass = isPdf ? 'pdf' : (drawerColor || 'green');
 

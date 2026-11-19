@@ -768,21 +768,6 @@
               "type": "link"
             },
             {
-              "path": "dx-runtime/dx_rt/tool/dx-fit/docs/QUICKSTART.md",
-              "title": "DX-Fit Quick Start Guide",
-              "size": 5838
-            },
-            {
-              "path": "dx-runtime/dx_rt/tool/dx-fit/docs/STRATEGY_COMPARISON.md",
-              "title": "DX-Fit Strategy Comparison",
-              "size": 12431
-            },
-            {
-              "path": "dx-runtime/dx_rt/tool/dx-fit/docs/README.md",
-              "title": "DX-Fit: DX-RT Performance Parameter Tuning Tool",
-              "size": 11296
-            },
-            {
               "path": "dx-runtime/dx_rt/README.md",
               "title": "DXRT (DEEPX Runtime) by DeepX",
               "size": 2201
