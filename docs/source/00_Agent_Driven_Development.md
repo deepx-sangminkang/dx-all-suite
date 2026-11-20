@@ -480,10 +480,10 @@ The dx-all-suite meta guide provides routing to all sub-project scenarios. If yo
 task matches a scenario in a sub-project guide, the suite builder will route you
 there automatically.
 
-- **dx-runtime scenarios** (cross-project builds, unified validation): See the [dx-runtime guide](../../../dx-runtime/docs/source/agent_development.md)
-- **dx_app scenarios** (Python/C++ inference apps): See the [dx_app guide](../../../dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md)
-- **dx_stream scenarios** (GStreamer pipelines): See the [dx_stream guide](../../../dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md)
-- **dx-compiler scenarios** (model compilation): See the [dx-compiler guide](../../dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md)
+- **dx-runtime scenarios** (cross-project builds, unified validation): See the [dx-runtime guide](https://github.com/DEEPX-AI/dx-runtime/blob/main/docs/source/agent_development.md)
+- **dx_app scenarios** (Python/C++ inference apps): See the [dx_app guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-APP/DX-APP_Agent_Driven_Development/)
+- **dx_stream scenarios** (GStreamer pipelines): See the [dx_stream guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-STREAM/DX-STREAM_Agent_Driven_Development/)
+- **dx-compiler scenarios** (model compilation): See the [dx-compiler guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-COM/DX-COMPILER_Agent_Driven_Development/)
 
 !!! note "Tip"  
 
@@ -496,10 +496,10 @@ skills, element catalogs, and worked examples:
 
 | Sub-Project | Guide |
 |---|---|
-| **dx-runtime** | [`dx-runtime/docs/source/agent_development.md`](../../../dx-runtime/docs/source/agent_development.md) |
-| **dx_app** | [`dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md`](../../../dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md) |
-| **dx_stream** | [`dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md`](../../../dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md) |
-| **dx-compiler** | [`dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md`](../../dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md) |
+| **dx-runtime** | [`dx-runtime/docs/source/agent_development.md`](https://github.com/DEEPX-AI/dx-runtime/blob/main/docs/source/agent_development.md) |
+| **dx_app** | [DX-APP Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-APP/DX-APP_Agent_Driven_Development/) |
+| **dx_stream** | [DX-STREAM Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-STREAM/DX-STREAM_Agent_Driven_Development/) |
+| **dx-compiler** | [DX-COMPILER Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-COM/DX-COMPILER_Agent_Driven_Development/) |
 
 ## Internal Reference Documents
 

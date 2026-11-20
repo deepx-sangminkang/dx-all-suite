@@ -70,7 +70,7 @@ InferenceEngine 설정, DxPreprocess/DxInfer 엘리먼트 연결 — 따라서 *
 <!-- dx-showcase:docs:table:end -->
 
 **전체 카탈로그 + showcase별 요약(빌드 GIF 포함) →**
-[`dx-agent-dev-showcase/README-ko.md`](../../dx-agent-dev-showcase/README-ko.md). 각 행의
+[`dx-agent-dev-showcase/README.md`](../../dx-agent-dev-showcase/README.md). 각 행의
 링크는 해당 showcase README(정확한 프롬프트, 4-way 평가 / 게임플레이 상세, 세션 transcript)로 연결됩니다.
 
 ### 동작 방식 — 모델이 아니라 harness
@@ -473,10 +473,10 @@ dx-all-suite 메타 가이드는 모든 서브 프로젝트 시나리오로 라�
 서브 프로젝트 가이드의 시나리오와 일치하면, Suite 빌더가 자동으로 해당 프로젝트로
 라우팅합니다.
 
-- **dx-runtime 시나리오** (크로스 프로젝트 빌드, 통합 검증): [dx-runtime 가이드](../../../dx-runtime/docs/source/agent_development.md) 참조
-- **dx_app 시나리오** (Python/C++ 추론 앱): [dx_app 가이드](../../../dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md) 참조
-- **dx_stream 시나리오** (GStreamer 파이프라인): [dx_stream 가이드](../../../dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md) 참조
-- **dx-compiler 시나리오** (모델 컴파일): [dx-compiler 가이드](../../dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md) 참조
+- **dx-runtime 시나리오** (크로스 프로젝트 빌드, 통합 검증): [dx-runtime 가이드](https://github.com/DEEPX-AI/dx-runtime/blob/main/docs/source/agent_development.md) 참조
+- **dx_app 시나리오** (Python/C++ 추론 앱): [dx_app 가이드](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-APP/DX-APP_Agent_Driven_Development/) 참조
+- **dx_stream 시나리오** (GStreamer 파이프라인): [dx_stream 가이드](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-STREAM/DX-STREAM_Agent_Driven_Development/) 참조
+- **dx-compiler 시나리오** (모델 컴파일): [dx-compiler 가이드](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-COM/DX-COMPILER_Agent_Driven_Development/) 참조
 
 !!! note "팁"  
 
@@ -489,10 +489,10 @@ dx-all-suite 메타 가이드는 모든 서브 프로젝트 시나리오로 라�
 
 | 서브 프로젝트 | 가이드 |
 |---|---|
-| **dx-runtime** | [`dx-runtime/docs/source/agent_development.md`](../../../dx-runtime/docs/source/agent_development.md) |
-| **dx_app** | [`dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md`](../../../dx_app/docs/source/docs/13_DX-APP_Agent_Driven_Development.md) |
-| **dx_stream** | [`dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md`](../../../dx_stream/docs/source/docs/08_DX-STREAM_Agent_Driven_Development.md) |
-| **dx-compiler** | [`dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md`](../../dx-compiler/source/docs/05_DX-COMPILER_Agent_Driven_Development.md) |
+| **dx-runtime** | [`dx-runtime/docs/source/agent_development.md`](https://github.com/DEEPX-AI/dx-runtime/blob/main/docs/source/agent_development.md) |
+| **dx_app** | [DX-APP Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-APP/DX-APP_Agent_Driven_Development/) |
+| **dx_stream** | [DX-STREAM Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-STREAM/DX-STREAM_Agent_Driven_Development/) |
+| **dx-compiler** | [DX-COMPILER Agent-Driven Development Guide](https://developer.deepx.ai/tech-docs/DXNN-SDK/DX-COM/DX-COMPILER_Agent_Driven_Development/) |
 
 ## 내부 참고 문서
 
