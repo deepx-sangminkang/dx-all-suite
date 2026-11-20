@@ -23,7 +23,6 @@ COMPAT_MATRIX = PROJECT_ROOT / "version_compat.json"
 # The published guide carries the same table; it is absent from a release tree.
 COMPAT_GUIDES = [
     PROJECT_ROOT / "docs/source/04_Version_Compatibility.md",
-    PROJECT_ROOT / "docs/source/04_Version_Compatibility_kor.md",
 ]
 SUITE_VERSION_FILE = PROJECT_ROOT / "release.ver"
 COMPONENT_RELEASE_FILES = {
